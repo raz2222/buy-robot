@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowButton } from "@/components/ui/arrow-button";
 import { Button } from "@/components/ui/button";
-import { Barcode, LabelRule, PillTag, TicketCard } from "@/components/ui/deco";
+import {
+  ArticleCard,
+  Barcode,
+  LabelRule,
+  PillTag,
+  TicketCard,
+} from "@/components/ui/deco";
 import { ProductImage } from "@/components/ui/product-image";
 import { useCarousel } from "@/hooks/useCarousel";
 import { formatPrice } from "@/lib/format";
@@ -70,39 +76,30 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
       aria-roledescription="carousel"
       aria-label="הדגמים המובילים"
     >
-      {/* ---------- bleeding artwork ---------- */}
+      {/* ---------- bleeding brand artwork ----------
+          A cut-out render bleeding off the inline-end edge, the way the
+          reference stages its robot. Deliberately *not* the carousel's
+          current product: a generic render captioned with a specific model
+          name would misrepresent what the shopper is buying. The real
+          photograph of the real product stays on the ticket card. */}
       <div
-        className="absolute inset-y-0 end-0 -z-10 w-full lg:w-[54%]"
-        style={{ transform: `translate3d(0, ${scroll * 0.16}px, 0)` }}
+        aria-hidden="true"
+        className="pointer-events-none absolute -z-10 select-none"
+        style={{
+          insetInlineEnd: "-6%",
+          top: "12%",
+          width: "min(62vw, 46rem)",
+          transform: `translate3d(0, ${scroll * 0.14}px, 0)`,
+        }}
       >
-        {robots.map((item, itemIndex) => (
-          <div
-            key={item.id}
-            aria-hidden={itemIndex !== index}
-            className={cn(
-              "absolute inset-0 transition-opacity duration-[1200ms] ease-smooth",
-              itemIndex === index ? "opacity-100" : "opacity-0",
-            )}
-          >
-            <ProductImage
-              src={item.hero_image}
-              alt=""
-              priority={itemIndex === 0}
-              className="size-full"
-            />
-          </div>
-        ))}
-
-        {/* Fades the photograph into the canvas on its inner edge so it
-            reads as bleeding out of the page rather than as a pasted box.
-            The artwork sits on the inline-end side, so in this RTL layout
-            its inner edge is the physical right — hence `to-r`. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-background/40 via-background/85 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-background/80" />
-        {/* Lifestyle photography is far brighter than the cut-out renders
-            this layout was designed around; this keeps it from washing the
-            canvas out. */}
-        <div className="absolute inset-0 bg-background/45" />
+        <img
+          src="/images/cutouts/vacuum-a.png"
+          alt=""
+          className="w-full opacity-[0.55] [filter:grayscale(0.35)_brightness(0.8)] lg:opacity-80"
+        />
+        {/* Sinks the render's near edge into the canvas so it reads as
+            bleeding out of the page rather than as a pasted box. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent" />
       </div>
 
       {/* A slow periwinkle bloom behind the product. */}
@@ -112,24 +109,25 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
         style={{ background: "hsl(var(--accent))" }}
       />
 
-      <div className="container">
+      <div className="container relative">
         <div className="grid items-center gap-12 lg:grid-cols-[20rem_1fr] lg:gap-16">
           {/* ---------- ticket card ---------- */}
           <div
             {...entrance(ready, 120, "order-2 mx-auto w-full max-w-[20rem] lg:order-1")}
           >
             <TicketCard>
-              <div className="p-3.5">
-                <div className="relative overflow-hidden rounded-[1.35rem] bg-background">
-                  <ProductImage
-                    src={robot.hero_image}
-                    alt={robot.name}
-                    priority
-                    className="aspect-[4/5]"
-                  />
-                </div>
+              {/* The accent plane, inset inside the grey shell, holding the
+                  artwork inset inside itself — the reference's three nested
+                  cards. */}
+              <div className="mx-3 rounded-[1.6rem] bg-accent p-2.5 pt-7">
+                <ProductImage
+                  src={robot.hero_image}
+                  alt={robot.name}
+                  priority
+                  className="aspect-[4/5] rounded-[1.3rem] bg-background"
+                />
 
-                <div className="mt-3.5 flex items-center justify-between gap-3 rounded-[1.35rem] bg-accent p-3 ps-5">
+                <div className="flex items-center justify-between gap-3 px-2 py-3">
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-base font-semibold text-accent-foreground">
                       {robot.name}
@@ -146,40 +144,40 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
                     <Link to={`/robot/${robot.slug}`} />
                   </ArrowButton>
                 </div>
-
-                {/* carousel dots */}
-                <div
-                  className="mt-4 flex justify-center gap-2"
-                  role="tablist"
-                  aria-label="בחירת דגם"
-                >
-                  {robots.map((item, itemIndex) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={itemIndex === index}
-                      aria-label={item.name}
-                      onClick={() => go(itemIndex)}
-                      className={cn(
-                        "size-3 rounded-full border-[1.5px] border-light-foreground transition-all duration-500 ease-spring",
-                        itemIndex === index
-                          ? "bg-light-foreground"
-                          : "bg-transparent hover:scale-125",
-                      )}
-                    />
-                  ))}
-                </div>
-
-                <p className="mt-4 px-1 text-[0.8rem] leading-6 text-light-foreground/75 line-clamp-2">
-                  {robot.summary}
-                </p>
-
-                <Barcode
-                  code={String(robot.score ?? 0).replace(".", "")}
-                  className="mt-4 px-1 pb-1"
-                />
               </div>
+
+              {/* carousel dots */}
+              <div
+                className="mt-4 flex justify-center gap-2"
+                role="tablist"
+                aria-label="בחירת דגם"
+              >
+                {robots.map((item, itemIndex) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={itemIndex === index}
+                    aria-label={item.name}
+                    onClick={() => go(itemIndex)}
+                    className={cn(
+                      "size-3 rounded-full border-[1.5px] border-light-foreground transition-all duration-500 ease-spring",
+                      itemIndex === index
+                        ? "bg-light-foreground"
+                        : "bg-transparent hover:scale-125",
+                    )}
+                  />
+                ))}
+              </div>
+
+              <p className="mt-4 px-5 text-[0.8rem] leading-6 text-light-foreground/75 line-clamp-2">
+                {robot.summary}
+              </p>
+
+              <Barcode
+                code={String(robot.score ?? 0).replace(".", "")}
+                className="mt-4 px-5"
+              />
             </TicketCard>
           </div>
 
@@ -220,10 +218,10 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
               {...entrance(
                 ready,
                 380,
-                "mt-10 flex max-w-lg flex-wrap items-center gap-x-8 gap-y-5 rounded-[1.5rem] border border-white/10 bg-surface/70 p-5 backdrop-blur-md",
+                "mt-10 flex w-full max-w-xl flex-wrap items-center gap-x-8 gap-y-5 rounded-[1.5rem] border border-white/10 bg-surface/70 p-5 backdrop-blur-md",
               )}
             >
-              <div className="min-w-0 flex-1">
+              <div className="min-w-0 flex-[2] basis-48">
                 <PillTag className="mb-2">{robot.category?.name ?? "מומלץ"}</PillTag>
                 <p className="truncate text-lg font-medium" dir="ltr">
                   {robot.name}
@@ -257,6 +255,60 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
                 <Link to="/find-my-robot">ענה על 4 שאלות</Link>
               </Button>
             </div>
+
+            {/* ---------- editorial specimen ---------- */}
+            <div {...entrance(ready, 560, "mt-10 max-w-sm")}>
+              <ArticleCard
+                tag={robot.category?.name ?? "מדריך קנייה"}
+                date={new Date().toLocaleDateString("he-IL")}
+                title="מה באמת משנה בקטגוריה הזאת, ומה רק נשמע טוב על הקופסה"
+                action={
+                  <Button asChild size="sm" variant="accent" className="h-8 px-4">
+                    <Link to="/guides">למדריך</Link>
+                  </Button>
+                }
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ---------- price-comparison card ----------
+            Kept in normal flow rather than floated over the artwork: at this
+            layout's widths an absolutely positioned card lands on top of the
+            render and collides with the copy column. */}
+        <div
+          {...entrance(
+            ready,
+            700,
+            "mt-12 flex max-w-xl items-stretch gap-4 rounded-[1.5rem] border border-white/10 bg-overlay/70 p-4 backdrop-blur-md",
+          )}
+        >
+          <ArrowButton
+            asChild
+            size="sm"
+            variant="solid"
+            direction="diagonal"
+            label="השוואת מחירים בין החנויות"
+            className="self-start border-0"
+          >
+            <Link to={`/robot/${robot.slug}`} />
+          </ArrowButton>
+
+          <div className="min-w-0 flex-1">
+            <p className="text-sm leading-6">
+              {best
+                ? `${robot.offers?.length ?? 0} חנויות מוכרות את הדגם הזה בישראל`
+                : "בקרוב בהשוואת המחירים"}
+            </p>
+            <PillTag className="mt-2">השוואת מחירים</PillTag>
+          </div>
+
+          <div className="hidden w-24 shrink-0 overflow-hidden rounded-[1rem] border border-white/20 sm:block">
+            <ProductImage
+              src={robot.hero_image}
+              alt=""
+              className="size-full"
+            />
           </div>
         </div>
       </div>

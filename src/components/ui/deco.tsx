@@ -78,12 +78,14 @@ export function Barcode({
 }
 
 /**
- * The notched "ticket" card that holds the featured product.
+ * The "ticket" card that holds the featured product.
  *
- * Built from two blocks rather than a fixed `path()`: a raised tab on the
- * inline-start side and the body below it, joined by an inverted corner
- * drawn with a radial gradient. Every dimension is relative, so the shape
- * holds at any width — a hardcoded path would not.
+ * Three nested planes, exactly as the reference stacks them: a light grey
+ * shell, an accent card inset inside it, and the artwork inset inside
+ * that. The grey shell's top edge steps — a folder tab on the inline-start
+ * half, joined to the lower half by an inverted corner. The step is drawn
+ * with a radial gradient rather than a fixed `path()`, so the silhouette
+ * survives any width.
  */
 export function TicketCard({
   children,
@@ -94,22 +96,70 @@ export function TicketCard({
 }) {
   return (
     <div className={cn("relative", className)}>
-      {/* raised tab */}
-      <div className="absolute start-0 top-0 h-16 w-[52%] rounded-t-[2rem] bg-light" />
+      {/* the raised half of the top edge */}
+      <div className="absolute start-0 top-0 h-14 w-[56%] rounded-t-[2rem] bg-light" />
 
-      {/* the concave joint between tab and body */}
+      {/* the concave joint down to the lower half */}
       <span
         aria-hidden="true"
-        className="absolute start-[52%] top-10 size-6"
+        className="absolute start-[56%] top-[1.75rem] size-7"
         style={{
           background:
-            "radial-gradient(circle at 100% 100%, transparent 0 1.5rem, hsl(var(--light)) 1.5rem)",
+            "radial-gradient(circle at 100% 100%, transparent 0 1.75rem, hsl(var(--light)) 1.75rem)",
         }}
       />
 
-      <div className="relative mt-10 rounded-[2rem] rounded-ss-none bg-light text-light-foreground">
+      <div className="relative mt-7 rounded-[2rem] rounded-ss-none bg-light pb-5 text-light-foreground">
         {children}
       </div>
+    </div>
+  );
+}
+
+/**
+ * The dark editorial card that sits under the hero headline in the
+ * reference — a piece of the site's own content shown as a specimen, so
+ * the hero proves there is substance behind it rather than just claiming
+ * there is.
+ */
+export function ArticleCard({
+  tag,
+  date,
+  title,
+  action,
+  className,
+}: {
+  tag: string;
+  date: string;
+  title: string;
+  action: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-[1.75rem] border border-white/10 bg-surface/80 p-5 backdrop-blur-md",
+        className,
+      )}
+    >
+      <div className="flex items-center justify-between gap-4">
+        <span className="grid size-9 place-items-center rounded-full border border-white/15">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <rect x="3.5" y="6" width="17" height="13" rx="4.5" stroke="currentColor" strokeWidth="1.6" />
+            <circle cx="9" cy="12.5" r="1.5" fill="currentColor" />
+            <circle cx="15" cy="12.5" r="1.5" fill="currentColor" />
+          </svg>
+        </span>
+        {action}
+        <span className="ms-auto text-xs text-muted-foreground tabular-nums">
+          <bdi>{date}</bdi>
+        </span>
+      </div>
+
+      <PillTag className="mt-4">{tag}</PillTag>
+
+      <p className="mt-3 text-[0.95rem] leading-7">{title}</p>
     </div>
   );
 }
