@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "buy-robots",
+      "runtimeExecutable": "/Users/raz/.local/node20/bin/node",
+      "runtimeArgs": ["node_modules/vite/bin/vite.js", "--port", "8080"],
+      "port": 8080
+    }
+  ]
+}

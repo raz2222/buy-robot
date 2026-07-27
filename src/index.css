@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Rubik — one variable family covers the whole site. The Hebrew and
+   Latin subsets are split by `unicode-range` so a visitor reading
+   Hebrew never downloads the Latin glyphs and vice versa.
+   ------------------------------------------------------------------ */
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/rubik-hebrew.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+}
+
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/rubik-latin.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+    U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ------------------------------------------------------------------
+   Design tokens.
+
+   Dark-first, sampled directly from the reference design: a black
+   canvas, three raised greys, one periwinkle accent and one light
+   panel. Every colour in the UI comes from here — no component
+   hardcodes a value, so the whole site can be retinted in one place.
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 100%;
+
+    /* Three raised planes. `surface` is the standard card, `raised` is a
+       card sitting on a card, `overlay` floats above imagery. */
+    --surface: 0 0% 7%;
+    --raised: 0 0% 18%;
+    --overlay: 0 0% 23%;
+
+    /* The one light panel — the ticket card that carries the featured
+       product. Deliberately the only bright block on the page. */
+    --light: 0 0% 85%;
+    --light-foreground: 0 0% 4%;
+
+    --muted-foreground: 0 0% 64%;
+
+    /* The single accent. Reserved for the live signal — best price,
+       savings, the active step — so it always means the same thing. */
+    --accent: 223 99% 72%;
+    --accent-foreground: 0 0% 4%;
+
+    /* Head-to-head comparison. Blue vs amber, never green vs red, so the
+       winner stays readable for the ~8% of men with red/green colour
+       blindness. Each product keeps its hue for the whole table. */
+    --vs-a: 223 99% 72%;
+    --vs-b: 32 95% 58%;
+
+    --border: 0 0% 100% / 0.12;
+    --input: 0 0% 100% / 0.18;
+    --ring: 223 99% 72%;
+
+    --radius-chip: 999px;
+    --radius-card: 24px;
+    --radius-hero: 32px;
+
+    /* One easing for the whole site. Everything decelerates the same way,
+       which is most of what makes motion feel designed rather than added. */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 7rem;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    text-rendering: optimizeLegibility;
+    /* The faint diagonal rules that run behind the whole reference design.
+       Two hairlines crossing at opposite angles, barely above the black. */
+    background-image:
+      repeating-linear-gradient(
+        115deg,
+        transparent 0 148px,
+        hsl(0 0% 100% / 0.028) 148px 149px
+      ),
+      repeating-linear-gradient(
+        -115deg,
+        transparent 0 210px,
+        hsl(0 0% 100% / 0.02) 210px 211px
+      );
+    background-attachment: fixed;
+  }
+
+  p {
+    line-height: 1.75;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-medium tracking-tight;
+    line-height: 1.14;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  bdi {
+    unicode-bidi: isolate;
+  }
+
+  /* A dark page deserves a dark scrollbar; the browser default flashes
+     white against the canvas on every scroll. */
+  * {
+    scrollbar-color: hsl(0 0% 30%) transparent;
+  }
+}
+
+@layer components {
+  /* ---------------- scroll reveal ---------------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.8s var(--ease),
+      transform 0.8s var(--ease);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Per-line headline reveal. Each line sits in its own clipping box and
+     slides up from below the mask, which reads far better than fading a
+     whole paragraph at once. */
+  .line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .line-mask > span {
+    display: block;
+    transform: translateY(100%);
+    transition: transform 0.9s var(--ease);
+  }
+
+  .line-mask.is-visible > span {
+    transform: none;
+  }
+
+  /* ---------------- surfaces ---------------- */
+  .card {
+    background: hsl(var(--surface));
+    border-radius: var(--radius-card);
+    border: 1px solid hsl(var(--border));
+  }
+
+  /* The hairline that sweeps across a card on hover — the design's main
+     "this is interactive" cue, cheaper and quieter than a shadow. */
+  .sheen {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sheen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 40%,
+      hsl(0 0% 100% / 0.07) 50%,
+      transparent 60%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.9s var(--ease);
+    pointer-events: none;
+  }
+
+  .sheen:hover::after {
+    transform: translateX(100%);
+  }
+
+  /* Placeholder artwork for products with no photograph yet. */
+  .art-placeholder {
+    background-image:
+      radial-gradient(120% 100% at 70% 0%, hsl(0 0% 24%) 0%, transparent 55%),
+      radial-gradient(90% 90% at 20% 100%, hsl(0 0% 16%) 0%, transparent 60%),
+      linear-gradient(140deg, hsl(0 0% 12%), hsl(0 0% 6%));
+  }
+
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--surface)) 25%,
+      hsl(0 0% 14%) 37%,
+      hsl(var(--surface)) 63%
+    );
+    background-size: 200% 100%;
+    @apply animate-shimmer;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Turns any container into the reference's barcode strip. */
+  .barcode {
+    background-image: repeating-linear-gradient(
+      90deg,
+      currentColor 0 2px,
+      transparent 2px 4px,
+      currentColor 4px 5px,
+      transparent 5px 9px,
+      currentColor 9px 12px,
+      transparent 12px 14px
+    );
+  }
+}
+
+/* Anyone who asks the OS to calm things down gets a still site. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal,
+  .line-mask > span {
+    opacity: 1;
+    transform: none;
+  }
+}

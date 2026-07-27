@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>buy robots — תצוגה מקדימה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --background:0 0% 100%; --foreground:0 0% 7%;
+    --surface:0 0% 96%; --ink:0 0% 5%; --ink-foreground:0 0% 100%; --ink-muted:0 0% 64%;
+    --muted-foreground:0 0% 44%; --signal:152 58% 34%; --border:0 0% 90%;
+    --radius-chip:8px; --radius-card:16px; --radius-hero:24px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;border-color:hsl(var(--border))}
+  body{font-family:Rubik,system-ui,sans-serif;background:hsl(var(--background));color:hsl(var(--foreground));-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-weight:600;letter-spacing:-.02em;line-height:1.15}
+  p{line-height:1.75}
+  img{display:block;width:100%;height:100%;object-fit:cover}
+  a{color:inherit;text-decoration:none}
+  bdi{unicode-bidi:isolate}
+  .container{width:100%;max-width:1200px;margin-inline:auto;padding-inline:1.25rem}
+  @media(min-width:768px){.container{padding-inline:2rem}}
+
+  /* header */
+  header{position:fixed;inset-inline:0;top:0;z-index:50;height:5rem;display:flex;align-items:center}
+  header .container{display:flex;align-items:center;gap:1.5rem}
+  .logo{display:flex;align-items:center;gap:.5rem;direction:ltr}
+  .logo .mark{width:2rem;height:2rem;border-radius:.5rem;background:#fff;display:grid;place-items:center}
+  .logo .name{font-size:1.125rem;font-weight:600;color:#fff}
+  nav{display:none;gap:.25rem;color:#fff;font-size:.875rem}
+  @media(min-width:1024px){nav{display:flex}}
+  nav a{padding:.5rem 1rem;border-radius:999px;opacity:.9}
+  nav a:hover{opacity:.6}
+  .spacer{margin-inline-end:auto}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;height:2.75rem;padding-inline:1.5rem;border-radius:999px;font-size:.875rem;font-weight:500;border:0;cursor:pointer;transition:.2s}
+  .btn-light{background:#fff;color:hsl(var(--foreground))}
+  .btn-dark{background:hsl(var(--foreground));color:#fff}
+  .btn-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.3)}
+  .btn-lg{height:3.25rem;padding-inline:2rem;font-size:1rem}
+
+  /* hero */
+  .hero{position:relative;min-height:38rem;height:92svh;display:flex;align-items:flex-end;overflow:hidden;background:hsl(var(--ink));color:#fff}
+  .hero-art{position:absolute;inset:0}
+  .hero-scrim{position:absolute;inset:0;background:linear-gradient(to top,hsl(var(--ink)),hsl(var(--ink)/.7),hsl(var(--ink)/.25))}
+  .hero-body{position:relative;z-index:10;padding-block:8rem 4rem;width:100%}
+  .chip{display:inline-flex;align-items:center;padding:.25rem .75rem;border-radius:var(--radius-chip);font-size:.75rem;line-height:1.25rem}
+  .chip-ghost{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff}
+  .chip-white{background:#fff;color:hsl(var(--foreground));box-shadow:0 1px 2px rgba(0,0,0,.06)}
+  .chip-green{background:hsl(var(--signal));color:#fff}
+  .hero h1{margin-top:1.25rem;font-size:clamp(2.25rem,6vw,4.25rem);line-height:1.08;max-width:48rem}
+  .hero .sum{margin-top:1.25rem;max-width:36rem;color:hsl(var(--ink-muted));font-size:1.125rem}
+  .meta{margin-top:2rem;display:flex;flex-wrap:wrap;align-items:center;gap:1.25rem 2rem}
+  .score{position:relative;width:76px;height:76px;flex:none}
+  .score svg{transform:rotate(-90deg)}
+  .score span{position:absolute;inset:0;display:grid;place-items:center;font-size:1.25rem;font-weight:600}
+  .divider{width:1px;height:2.5rem;background:rgba(255,255,255,.15)}
+  .price{font-size:1.5rem;font-weight:600;margin-top:.25rem}
+  .cta-row{margin-top:2.25rem;display:flex;flex-wrap:wrap;gap:.75rem}
+  .dots{margin-top:3rem;display:flex;gap:.75rem}
+  .dot{height:2px;width:1.5rem;border-radius:999px;background:rgba(255,255,255,.3)}
+  .dot.on{width:3rem;background:#fff}
+
+  /* sections */
+  section.pad{padding-block:4rem}
+  @media(min-width:768px){section.pad{padding-block:6rem}}
+  .surface{background:hsl(var(--surface))}
+  .eyebrow{font-size:.75rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:hsl(var(--muted-foreground));margin-bottom:.75rem}
+  .head{display:flex;flex-direction:column;gap:1.5rem}
+  @media(min-width:640px){.head{flex-direction:row;align-items:flex-end;justify-content:space-between}}
+  .head h2{font-size:clamp(1.75rem,3vw,2.25rem)}
+  .head p{margin-top:1rem;color:hsl(var(--muted-foreground));max-width:42rem}
+  .link-more{font-size:.875rem;font-weight:500;white-space:nowrap}
+
+  .grid3{margin-top:3rem;display:grid;gap:3rem 2rem;grid-template-columns:1fr}
+  @media(min-width:640px){.grid3{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.grid3{grid-template-columns:repeat(3,1fr)}}
+  .card-art{position:relative;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:4/3;background:hsl(var(--ink))}
+  .card-art .chip{position:absolute;top:.75rem}
+  .chip-start{inset-inline-start:.75rem}
+  .chip-end{inset-inline-end:.75rem}
+  .card-top{margin-top:1rem;display:flex;align-items:flex-start;gap:.75rem}
+  .brand{font-size:.75rem;color:hsl(var(--muted-foreground))}
+  .card-title{margin-top:.25rem;font-size:1rem;font-weight:600;line-height:1.5}
+  .card-sum{margin-top:.5rem;font-size:.875rem;color:hsl(var(--muted-foreground));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card-foot{margin-top:1rem;padding-top:1rem;border-top:1px solid hsl(var(--border));display:flex;align-items:flex-end;justify-content:space-between}
+  .card-foot .label{font-size:.75rem;color:hsl(var(--muted-foreground))}
+  .card-foot .val{font-size:1.125rem;font-weight:600;margin-top:.125rem}
+  .score-sm{position:relative;width:40px;height:40px;flex:none}
+  .score-sm span{position:absolute;inset:0;display:grid;place-items:center;font-size:.75rem;font-weight:600}
+
+  /* categories */
+  .grid4{margin-top:3rem;display:grid;gap:1rem;grid-template-columns:1fr}
+  @media(min-width:640px){.grid4{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.grid4{grid-template-columns:repeat(4,1fr)}}
+  .cat{display:flex;flex-direction:column;height:100%;border:1px solid hsl(var(--border));border-radius:var(--radius-card);padding:1.5rem;transition:.3s}
+  .cat:hover{transform:translateY(-4px);border-color:hsl(var(--foreground));box-shadow:0 24px 48px -20px rgba(0,0,0,.25)}
+  .cat .ic{width:2.75rem;height:2.75rem;border-radius:var(--radius-chip);background:hsl(var(--surface));display:grid;place-items:center}
+  .cat h3{margin-top:1.25rem;font-size:1rem}
+  .cat p{margin-top:.5rem;font-size:.875rem;color:hsl(var(--muted-foreground));flex:1}
+
+  /* waitlist */
+  .dark{background:hsl(var(--ink));color:#fff}
+  .split{display:grid;gap:3.5rem;align-items:center}
+  @media(min-width:1024px){.split{grid-template-columns:repeat(2,1fr)}}
+  .counter{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);border-radius:var(--radius-hero);padding:2.5rem;text-align:center}
+  .counter .n{font-size:clamp(3rem,7vw,4.5rem);font-weight:600}
+  .counter .l{margin-top:.75rem;font-size:.875rem;color:hsl(var(--ink-muted))}
+  .tracker{margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);text-align:start;display:grid;gap:.75rem}
+  .tracker div{display:flex;justify-content:space-between;gap:1rem;font-size:.875rem}
+  .tracker span:last-child{font-size:.75rem;color:hsl(var(--ink-muted))}
+  .field{display:flex;gap:.5rem;padding:.375rem;border-radius:999px;background:rgba(255,255,255,.1);max-width:28rem;margin-top:2rem}
+  .field input{flex:1;height:3rem;border:0;background:transparent;color:#fff;padding-inline:1.25rem;font:inherit;font-size:.875rem;outline:none;direction:ltr;text-align:start}
+  .field input::placeholder{color:hsl(var(--ink-muted))}
+
+  /* footer */
+  footer{background:hsl(var(--ink));color:#fff;padding-block:4rem}
+  .fgrid{display:grid;gap:3rem;grid-template-columns:1fr}
+  @media(min-width:768px){.fgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:1024px){.fgrid{grid-template-columns:repeat(4,1fr)}}
+  .fgrid h3{font-size:.875rem;font-weight:500}
+  .fgrid ul{list-style:none;margin-top:1.25rem;display:grid;gap:.75rem}
+  .fgrid a{font-size:.875rem;color:hsl(var(--ink-muted))}
+  .fgrid a:hover{color:#fff}
+  .disclosure{margin-top:3.5rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03);border-radius:var(--radius-card);padding:1.25rem;font-size:.75rem;line-height:1.6;color:hsl(var(--ink-muted))}
+  .copy{margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);font-size:.75rem;color:hsl(var(--ink-muted));display:flex;justify-content:space-between;gap:.75rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a class="logo" href="#">
+      <span class="mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2v3" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/>
+          <rect x="3.5" y="6" width="17" height="13" rx="4" stroke="#0d0d0d" stroke-width="2"/>
+          <circle cx="9" cy="12.5" r="1.6" fill="#0d0d0d"/><circle cx="15" cy="12.5" r="1.6" fill="#0d0d0d"/>
+        </svg>
+      </span>
+      <span class="name">buy robots</span>
+    </a>
+    <nav>
+      <a href="#">קטגוריות</a><a href="#">מדריכים והשוואות</a><a href="#">הומנואידים</a><a href="#">תיקונים</a>
+    </nav>
+    <span class="spacer"></span>
+    <button class="btn btn-light">מצא את הרובוט שלי</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-art"><img src="../public/images/robots/roborock-s8-maxv-ultra.jpg" alt="" /></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-body">
+    <div class="container">
+      <span class="chip chip-ghost">שואבי אבק רובוטיים</span>
+      <h1>Roborock S8 MaxV Ultra</h1>
+      <p class="sum">הדגל של רוברוק: זרוע צדדית נשלפת, שטיפה בלחץ, ותחנה שמכבסת ומייבשת את המגבת בחום.</p>
+      <div class="meta">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div class="score">
+            <svg width="76" height="76"><circle cx="38" cy="38" r="35.5" fill="none" stroke="#fff" stroke-opacity=".15" stroke-width="5"/><circle cx="38" cy="38" r="35.5" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-dasharray="209.7 223"/></svg>
+            <span>9.4</span>
+          </div>
+          <div style="font-size:.875rem;line-height:1.25rem">
+            <p style="font-weight:500">הציון שלנו</p>
+            <p style="color:hsl(var(--ink-muted))">מתוך 10</p>
+          </div>
+        </div>
+        <span class="divider"></span>
+        <div style="font-size:.875rem">
+          <p style="color:hsl(var(--ink-muted))">הכי זול ב-Amazon</p>
+          <p class="price"><bdi>‏6,290 ₪</bdi></p>
+        </div>
+      </div>
+      <div class="cta-row">
+        <button class="btn btn-light btn-lg">השווה מחירים ←</button>
+        <button class="btn btn-outline btn-lg">לא בטוח? ענה על 4 שאלות</button>
+      </div>
+      <div class="dots"><span class="dot on"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad surface">
+  <div class="container">
+    <div class="head">
+      <div>
+        <p class="eyebrow">הכי מומלצים</p>
+        <h2>המובילים החודש</h2>
+        <p>שלושת הדגמים עם הציון הגבוה ביותר כרגע, עם המחיר הזול ביותר שמצאנו בכל חנות.</p>
+      </div>
+      <a class="link-more" href="#">לכל הרובוטים ←</a>
+    </div>
+
+    <div class="grid3">
+      <!-- card 1 -->
+      <article>
+        <div class="card-art">
+          <img src="../public/images/robots/roborock-s8-maxv-ultra.jpg" alt="Roborock S8 MaxV Ultra" />
+          <span class="chip chip-white chip-start">שואבי אבק רובוטיים</span>
+          <span class="chip chip-green chip-end">חוסך <bdi>400 ₪</bdi></span>
+        </div>
+        <div class="card-top">
+          <div style="flex:1;min-width:0">
+            <p class="brand">Roborock</p>
+            <h3 class="card-title">Roborock S8 MaxV Ultra</h3>
+          </div>
+          <div class="score-sm">
+            <svg width="40" height="40" style="transform:rotate(-90deg)"><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="3"/><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="109 116"/></svg>
+            <span>9.4</span>
+          </div>
+        </div>
+        <p class="card-sum">הדגל של רוברוק: זרוע צדדית נשלפת, שטיפה בלחץ, ותחנה שמכבסת ומייבשת את המגבת בחום.</p>
+        <div class="card-foot">
+          <div><p class="label">הכי זול ב-Amazon</p><p class="val"><bdi>‏6,290 ₪</bdi></p></div>
+          <a class="link-more" href="#">השווה מחירים ←</a>
+        </div>
+      </article>
+
+      <!-- card 2 -->
+      <article>
+        <div class="card-art">
+          <img src="../public/images/robots/maytronics-dolphin-s300i.jpg" alt="Maytronics Dolphin S300i" />
+          <span class="chip chip-white chip-start">רובוטים לבריכה</span>
+          <span class="chip chip-green chip-end">חוסך <bdi>100 ₪</bdi></span>
+        </div>
+        <div class="card-top">
+          <div style="flex:1;min-width:0">
+            <p class="brand">Maytronics</p>
+            <h3 class="card-title">Maytronics Dolphin S300i</h3>
+          </div>
+          <div class="score-sm">
+            <svg width="40" height="40" style="transform:rotate(-90deg)"><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="3"/><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="108 116"/></svg>
+            <span>9.3</span>
+          </div>
+        </div>
+        <p class="card-sum">תוצרת כחול-לבן מקיבוץ מעגן מיכאל, ובצדק מוביל עולמי. מנקה קרקעית, דפנות וקו מים.</p>
+        <div class="card-foot">
+          <div><p class="label">הכי זול ב-Ivory</p><p class="val"><bdi>‏6,390 ₪</bdi></p></div>
+          <a class="link-more" href="#">השווה מחירים ←</a>
+        </div>
+      </article>
+
+      <!-- card 3 -->
+      <article>
+        <div class="card-art">
+          <img src="../public/images/robots/husqvarna-automower-320-nera.jpg" alt="Husqvarna Automower 320 NERA" />
+          <span class="chip chip-white chip-start">מכסחות דשא רובוטיות</span>
+        </div>
+        <div class="card-top">
+          <div style="flex:1;min-width:0">
+            <p class="brand">Husqvarna</p>
+            <h3 class="card-title">Husqvarna Automower 320 NERA</h3>
+          </div>
+          <div class="score-sm">
+            <svg width="40" height="40" style="transform:rotate(-90deg)"><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-opacity=".15" stroke-width="3"/><circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-dasharray="107 116"/></svg>
+            <span>9.2</span>
+          </div>
+        </div>
+        <p class="card-sum">הסטנדרט המקצועי. יקרה, אבל עובדת שנים ומטפלת בחצרות מורכבות עם שיפועים.</p>
+        <div class="card-foot">
+          <div><p class="label">הכי זול ב-Ivory</p><p class="val"><bdi>‏12,900 ₪</bdi></p></div>
+          <a class="link-more" href="#">השווה מחירים ←</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="pad">
+  <div class="container">
+    <div class="head">
+      <div>
+        <p class="eyebrow">לפי סוג</p>
+        <h2>כל הקטגוריות</h2>
+        <p>מהשואב שכולם מכירים ועד מכסחת דשא ורובוט בריכה.</p>
+      </div>
+    </div>
+    <div class="grid4">
+      <a class="cat" href="#"><span class="ic">🤖</span><h3>שואבי אבק רובוטיים</h3><p>הקטגוריה הגדולה בישראל — שואב, שוטף ומרוקן את עצמו</p><span class="link-more" style="margin-top:1.25rem">לצפייה ←</span></a>
+      <a class="cat" href="#"><span class="ic">💧</span><h3>שוטפי רצפה</h3><p>ניקוי רטוב יסודי לפרקט, קרמיקה ואריחים</p><span class="link-more" style="margin-top:1.25rem">לצפייה ←</span></a>
+      <a class="cat" href="#"><span class="ic">🌳</span><h3>מכסחות דשא רובוטיות</h3><p>הדשא מטופל לבד, בלי כבלים ובלי רעש</p><span class="link-more" style="margin-top:1.25rem">לצפייה ←</span></a>
+      <a class="cat" href="#"><span class="ic">🌊</span><h3>רובוטים לבריכה</h3><p>ניקוי קרקעית ודפנות — כולל תוצרת ישראלית</p><span class="link-more" style="margin-top:1.25rem">לצפייה ←</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="pad dark">
+  <div class="container">
+    <div class="split">
+      <div>
+        <p class="eyebrow" style="color:hsl(var(--ink-muted))">הגל הבא</p>
+        <h2 style="font-size:clamp(1.75rem,4vw,3rem)">נעדכן אותך ברגע שרובוט הומנואידי מגיע לישראל</h2>
+        <p style="margin-top:1.25rem;max-width:32rem;color:hsl(var(--ink-muted))">אופטימוס, Figure ו-Unitree עדיין לא נמכרים כאן לשימוש ביתי. אנחנו עוקבים אחרי היבוא, המחירים והאישורים — ושולחים עדכון כשבאמת יש מה לספר.</p>
+        <form class="field" onsubmit="return false">
+          <input type="email" placeholder="כתובת אימייל" />
+          <button class="btn btn-light">עדכנו אותי</button>
+        </form>
+      </div>
+      <div class="counter">
+        <p class="n"><bdi>1</bdi></p>
+        <p class="l">ישראלים כבר ברשימת ההמתנה</p>
+        <div class="tracker">
+          <div><span dir="ltr" style="font-weight:500">Tesla Optimus</span><span>טרם הוכרז תאריך לישראל</span></div>
+          <div><span dir="ltr" style="font-weight:500">Figure 02</span><span>פיילוטים תעשייתיים בלבד</span></div>
+          <div><span dir="ltr" style="font-weight:500">Unitree G1</span><span>זמין ביבוא אישי</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div>
+        <a class="logo" href="#">
+          <span class="mark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v3" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/><rect x="3.5" y="6" width="17" height="13" rx="4" stroke="#0d0d0d" stroke-width="2"/><circle cx="9" cy="12.5" r="1.6" fill="#0d0d0d"/><circle cx="15" cy="12.5" r="1.6" fill="#0d0d0d"/></svg></span>
+          <span class="name">buy robots</span>
+        </a>
+        <p style="margin-top:1.25rem;max-width:20rem;font-size:.875rem;color:hsl(var(--ink-muted))">מרכזים את כל הרובוטים הביתיים שנמכרים בישראל, משווים מחירים בין החנויות, ועוזרים לבחור נכון.</p>
+      </div>
+      <div><h3>קטגוריות</h3><ul><li><a href="#">שואבי אבק רובוטיים</a></li><li><a href="#">שוטפי רצפה</a></li><li><a href="#">מכסחות דשא</a></li><li><a href="#">רובוטים לבריכה</a></li></ul></div>
+      <div><h3>כלים</h3><ul><li><a href="#">מצא את הרובוט שלי</a></li><li><a href="#">מדריכי קנייה</a></li><li><a href="#">רשימת המתנה — הומנואידים</a></li><li><a href="#">בקשת תיקון</a></li></ul></div>
+      <div><h3>מידע</h3><ul><li><a href="#">עלינו</a></li><li><a href="#">איך אנחנו מדרגים</a></li><li><a href="#">לסוחרים ויבואנים</a></li><li><a href="#">פרטיות ותנאי שימוש</a></li></ul></div>
+    </div>
+    <div class="disclosure"><strong style="color:#fff;font-weight:500">גילוי נאות:</strong> חלק מהקישורים באתר הם קישורי שותפים. אם תרכשו דרכם, אנחנו עשויים לקבל עמלה מהחנות — בלי תוספת עלות עבורכם. העמלה אינה משפיעה על הציון שאנחנו נותנים למוצר ולא על סדר ההצגה.</div>
+    <div class="copy"><span>© 2026 buy robots. כל הזכויות שמורות.</span><span dir="ltr">buyrobots.co.il</span></div>
+  </div>
+</footer>
+
+</body>
+</html>
