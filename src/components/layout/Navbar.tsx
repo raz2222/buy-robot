@@ -127,16 +127,14 @@ function MenuButton({ open, onClick }: { open: boolean; onClick: () => void }) {
       aria-expanded={open}
       className="group/menu grid size-11 shrink-0 place-items-center rounded-full transition-colors hover:bg-white/5"
     >
-      <span className="flex w-6 flex-col gap-[5px]">
+      {/* Three equal rules, as in the reference — the staggered-length
+          hamburger is a different design language entirely. */}
+      <span className="flex w-[1.6rem] flex-col gap-[6px]">
         {[0, 1, 2].map((index) => (
           <span
             key={index}
-            className={cn(
-              "h-px w-full origin-[100%_50%] bg-foreground transition-transform duration-500 ease-smooth",
-              index === 0 && "group-hover/menu:scale-x-100",
-              index === 1 && "scale-x-[0.65] group-hover/menu:scale-x-100",
-              index === 2 && "scale-x-[0.85] group-hover/menu:scale-x-100",
-            )}
+            className="h-[2px] w-full origin-[100%_50%] rounded-full bg-foreground transition-transform duration-500 ease-smooth group-hover/menu:scale-x-[0.7]"
+            style={{ transitionDelay: `${index * 60}ms` }}
           />
         ))}
       </span>

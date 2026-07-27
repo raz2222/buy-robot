@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>buy robots — Hero (תצוגה מקדימה)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --background:0 0% 4%; --foreground:0 0% 100%;
+    --surface:0 0% 7%; --raised:0 0% 18%; --overlay:0 0% 23%;
+    --light:0 0% 85%; --light-foreground:0 0% 4%;
+    --muted-foreground:0 0% 64%;
+    --accent:223 99% 72%; --accent-foreground:0 0% 100%;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:Rubik,system-ui,sans-serif;
+    background:hsl(var(--background));color:hsl(var(--foreground));
+    -webkit-font-smoothing:antialiased;min-height:100dvh;
+    background-image:
+      repeating-linear-gradient(115deg,transparent 0 148px,hsl(0 0% 100%/.028) 148px 149px),
+      repeating-linear-gradient(-115deg,transparent 0 210px,hsl(0 0% 100%/.02) 210px 211px);
+    background-attachment:fixed;
+  }
+  img{display:block;max-width:100%}
+  bdi{unicode-bidi:isolate}
+  a{color:inherit;text-decoration:none}
+  .container{width:100%;max-width:1320px;margin-inline:auto;padding-inline:1.25rem}
+  @media(min-width:768px){.container{padding-inline:2rem}}
+
+  /* ---------- header ---------- */
+  header{position:fixed;inset-inline:0;top:0;z-index:40}
+  header .container{display:flex;align-items:center;gap:1.25rem;height:6rem}
+  .burger{display:flex;flex-direction:column;gap:6px;width:1.6rem;background:none;border:0;cursor:pointer;padding:0}
+  .burger span{height:2px;width:100%;border-radius:99px;background:#fff;transform-origin:100% 50%;transition:transform .5s var(--ease)}
+  .burger:hover span{transform:scaleX(.7)}
+  .logo{display:flex;align-items:center;gap:.625rem;direction:ltr}
+  .logo svg{transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+  .logo:hover svg{transform:rotate(-12deg)}
+  .logo b{font-size:1.35rem;font-weight:600;letter-spacing:-.02em;line-height:1}
+  nav{display:none;gap:1.75rem;margin-inline-start:1.5rem}
+  @media(min-width:1024px){nav{display:flex}}
+  nav a{position:relative;font-size:.875rem;color:hsl(var(--muted-foreground));padding-block:.25rem;transition:color .3s}
+  nav a:hover{color:#fff}
+  nav a::after{content:"";position:absolute;inset-inline:0;bottom:0;height:1px;background:hsl(var(--accent));transform:scaleX(0);transform-origin:100% 50%;transition:transform .5s var(--ease)}
+  nav a:hover::after{transform:scaleX(1)}
+  .spacer{margin-inline-end:auto}
+  .search{display:none;align-items:center;gap:.5rem;height:3rem;border:1px solid hsl(0 0% 100%/.25);border-radius:99px;padding-inline:1.25rem .375rem;transition:border-color .3s}
+  @media(min-width:640px){.search{display:flex}}
+  .search:focus-within{border-color:hsl(0 0% 100%/.7)}
+  .search input{width:11rem;background:none;border:0;outline:none;color:#fff;font:inherit;font-size:.875rem}
+  .search input::placeholder{color:hsl(var(--muted-foreground))}
+
+  /* ---------- circular arrow button ---------- */
+  .arrow{display:grid;place-items:center;flex:none;border-radius:99px;background:none;cursor:pointer;
+         border:1px solid hsl(0 0% 100%/.3);color:inherit;transition:border-color .3s,background-color .3s,color .3s}
+  .arrow:hover{border-color:#fff}
+  .arrow.sm{width:2.25rem;height:2.25rem}
+  .arrow.md{width:3rem;height:3rem}
+  .arrow svg{width:1.05rem;height:1.05rem;transition:transform .5s var(--ease)}
+  .arrow:hover svg{transform:translate(-.25rem,-.25rem)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;isolation:isolate;display:flex;align-items:center;overflow:hidden;
+        padding-block:8rem 6rem}
+  @media(min-width:1024px){.hero{min-height:100svh;padding-block:8rem 5rem}}
+  .art{position:absolute;z-index:-1;pointer-events:none;user-select:none;
+       inset-inline-end:-6%;top:12%;width:min(62vw,46rem)}
+  .art img{width:100%;opacity:.55;filter:grayscale(.35) brightness(.8)}
+  @media(min-width:1024px){.art img{opacity:.8}}
+  .art::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,hsl(var(--background)),transparent 60%)}
+  .bloom{position:absolute;z-index:-1;inset-inline-end:10%;top:25%;width:38rem;height:38rem;
+         border-radius:99px;background:hsl(var(--accent));opacity:.16;filter:blur(120px);
+         animation:drift 18s ease-in-out infinite}
+  @keyframes drift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(2%,-3%,0) scale(1.06)}}
+
+  .grid{display:grid;gap:3rem;align-items:center}
+  @media(min-width:1024px){.grid{grid-template-columns:20rem 1fr;gap:4rem}}
+
+  /* ---------- notched ticket card ---------- */
+  .ticket{order:2;margin-inline:auto;width:100%;max-width:20rem;color:hsl(var(--light-foreground))}
+  @media(min-width:1024px){.ticket{order:1}}
+  .panel{position:relative}
+  .panel > .tab{position:absolute;inset-inline-start:0;top:0}
+  .panel > .joint{position:absolute;width:1.5rem;height:1.5rem}
+  .panel > .body{position:relative}
+
+  .copy{order:1}
+  @media(min-width:1024px){.copy{order:2}}
+  .rule{display:inline-block;border-bottom:1px solid hsl(0 0% 100%/.4);padding-bottom:.5rem;
+        font-size:.875rem;color:hsl(var(--muted-foreground))}
+  h1{margin-top:1.75rem;max-width:42rem;font-size:clamp(2.4rem,5.2vw,3.6rem);font-weight:500;
+     line-height:1.12;letter-spacing:-.02em;text-wrap:balance}
+  h1 .on{color:hsl(var(--accent))}
+  .lede{margin-top:1.5rem;max-width:28rem;font-size:1rem;line-height:2;color:hsl(var(--muted-foreground))}
+
+  .strip{margin-top:2.5rem;display:flex;flex-wrap:wrap;align-items:center;gap:1.25rem 2rem;
+         width:100%;max-width:36rem;border:1px solid hsl(0 0% 100%/.1);border-radius:1.5rem;
+         background:hsl(var(--surface)/.7);backdrop-filter:blur(12px);padding:1.25rem}
+  .pill{display:inline-flex;align-items:center;border:1px solid hsl(0 0% 100%/.3);border-radius:99px;
+        padding:.25rem .75rem;font-size:.75rem;line-height:1.25rem;white-space:nowrap}
+  .strip .name{flex:2 1 12rem;min-width:0}
+  .strip .name p{margin-top:.5rem;font-size:1.125rem;font-weight:500;direction:ltr;
+                 overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .strip .k{font-size:.7rem;color:hsl(var(--muted-foreground))}
+  .strip .v{font-size:1.5rem;font-weight:500;font-variant-numeric:tabular-nums}
+  .strip .v.accent{color:hsl(var(--accent))}
+  .sep{width:1px;height:2.25rem;background:hsl(0 0% 100%/.15)}
+
+  .btns{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem}
+  .btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;
+       height:3.25rem;padding-inline:2rem;border-radius:99px;font:inherit;font-size:1rem;font-weight:500;
+       border:0;cursor:pointer;overflow:hidden;transition:color .3s,border-color .3s,transform .3s}
+  .btn::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:99px;
+               transform:scaleX(0);transform-origin:100% 50%;transition:transform .5s var(--ease)}
+  .btn:hover::before{transform:scaleX(1)}
+  .btn:active{transform:scale(.97)}
+  .btn-solid{background:#fff;color:hsl(var(--background))}
+  .btn-solid::before{background:hsl(var(--accent))}
+  .btn-solid:hover{color:hsl(var(--accent-foreground))}
+  .btn-outline{background:none;border:1px solid hsl(0 0% 100%/.25);color:#fff}
+  .btn-outline::before{background:#fff}
+  .btn-outline:hover{color:hsl(var(--background));border-color:transparent}
+
+  .article{margin-top:2.5rem;max-width:24rem;border:1px solid hsl(0 0% 100%/.1);border-radius:1.75rem;
+           background:hsl(var(--surface)/.8);backdrop-filter:blur(12px);padding:1.25rem}
+  .article .row{display:flex;align-items:center;gap:1rem}
+  .article .mark{display:grid;place-items:center;width:2.25rem;height:2.25rem;border-radius:99px;
+                 border:1px solid hsl(0 0% 100%/.15)}
+  .article .date{margin-inline-start:auto;font-size:.75rem;color:hsl(var(--muted-foreground));font-variant-numeric:tabular-nums}
+  .chip-accent{background:hsl(var(--accent));color:hsl(var(--accent-foreground));border:0;
+               border-radius:99px;padding:.35rem 1rem;font-size:.8rem;font-weight:500;cursor:pointer}
+  .article p{margin-top:.75rem;font-size:.95rem;line-height:1.75}
+
+  .dots{margin-top:1rem;display:flex;justify-content:center;gap:.625rem}
+  .dot{width:.75rem;height:.75rem;border-radius:99px;border:1.5px solid hsl(var(--light-foreground));
+       background:none;cursor:pointer;transition:transform .5s cubic-bezier(.34,1.56,.64,1)}
+  .dot.on{background:hsl(var(--light-foreground))}
+  .dot:not(.on):hover{transform:scale(1.25)}
+  .desc{margin-top:1rem;padding-inline:.25rem;font-size:.8rem;line-height:1.5rem;
+        color:hsl(var(--light-foreground)/.75)}
+  .barcode{margin-top:1rem;padding-inline:.25rem;display:flex;align-items:flex-end;gap:.75rem}
+  .barcode .bars{height:2.25rem;flex:1;color:hsl(var(--light-foreground)/.85);
+    background-image:repeating-linear-gradient(90deg,currentColor 0 2px,transparent 2px 4px,
+      currentColor 4px 5px,transparent 5px 9px,currentColor 9px 12px,transparent 12px 14px)}
+  .barcode .code{flex:none;font-size:.65rem;font-weight:500;line-height:.85rem;letter-spacing:.03em}
+
+  @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <button class="burger" aria-label="פתיחת תפריט"><span></span><span></span><span></span></button>
+
+    <a class="logo" href="#" aria-label="buy robots">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2v3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+        <rect x="3.5" y="6" width="17" height="13" rx="4.5" stroke="#fff" stroke-width="1.6"/>
+        <circle cx="9" cy="12.5" r="1.5" fill="#fff"/><circle cx="15" cy="12.5" r="1.5" fill="#fff"/>
+      </svg>
+      <b>buy robots</b>
+    </a>
+
+    <nav>
+      <a href="#">מדריכים</a><a href="#">הומנואידים</a><a href="#">תיקונים</a><a href="#">לסוחרים</a>
+    </nav>
+
+    <span class="spacer"></span>
+
+    <form class="search" onsubmit="return false">
+      <input type="search" placeholder="חיפוש דגם או מותג" aria-label="חיפוש" />
+      <button class="arrow sm" type="submit" aria-label="חיפוש">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M14 6H6v8M14 6 6 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="art">
+    <img src="../public/images/cutouts/vacuum-a.png" alt="" />
+  </div>
+  <div class="bloom"></div>
+
+  <div class="container">
+    <div class="grid">
+
+      <!-- ============ notched ticket card ============ -->
+      <div class="ticket">
+        <!-- shell -->
+        <div class="panel">
+          <div class="tab" style="width:62%;height:3.75rem;background:hsl(var(--light));border-start-start-radius:2rem;border-start-end-radius:2rem"></div>
+          <span class="joint" style="inset-inline-start:62%;top:1.75rem;background:radial-gradient(circle at 100% 100%,transparent 0 1.5rem,hsl(var(--light)) 1.5rem)"></span>
+          <div class="body" style="margin-top:1.75rem;background:hsl(var(--light));border-radius:2rem;border-start-start-radius:0">
+            <div style="padding:.25rem .75rem 1.25rem">
+
+              <!-- accent plane -->
+              <div class="panel">
+                <div class="tab" style="width:54%;height:3.5rem;background:hsl(var(--accent));border-start-start-radius:1.6rem;border-start-end-radius:1.6rem"></div>
+                <span class="joint" style="inset-inline-start:54%;top:1.5rem;background:radial-gradient(circle at 100% 100%,transparent 0 1.5rem,hsl(var(--accent)) 1.5rem)"></span>
+                <div class="body" style="margin-top:1.5rem;background:hsl(var(--accent));border-radius:1.6rem;border-start-start-radius:0">
+                  <div style="padding:0 .625rem .625rem">
+
+                    <!-- artwork plane -->
+                    <div class="panel">
+                      <div class="tab" style="width:46%;height:3.25rem;background:hsl(var(--background));border-start-start-radius:1.3rem;border-start-end-radius:1.3rem"></div>
+                      <span class="joint" style="inset-inline-start:46%;top:1.25rem;background:radial-gradient(circle at 100% 100%,transparent 0 1.5rem,hsl(var(--background)) 1.5rem)"></span>
+                      <div class="body" style="margin-top:1.25rem;background:hsl(var(--background));border-radius:1.3rem;border-start-start-radius:0;overflow:hidden">
+                        <div style="aspect-ratio:4/5">
+                          <img src="../public/images/robots/roborock-s8-maxv-ultra.jpg" alt="Roborock S8 MaxV Ultra"
+                               style="width:100%;height:100%;object-fit:cover" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.75rem .375rem .25rem;color:hsl(var(--accent-foreground))">
+                      <span style="flex:1;min-width:0;font-size:1rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" dir="ltr">Roborock S8 MaxV Ultra</span>
+                      <a class="arrow md" href="#" aria-label="לעמוד המוצר" style="border-color:hsl(0 0% 100%/.5)">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M14 6H6v8M14 6 6 14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dots" role="tablist" aria-label="בחירת דגם">
+                <button class="dot on" role="tab" aria-selected="true" aria-label="דגם 1"></button>
+                <button class="dot" role="tab" aria-selected="false" aria-label="דגם 2"></button>
+                <button class="dot" role="tab" aria-selected="false" aria-label="דגם 3"></button>
+                <button class="dot" role="tab" aria-selected="false" aria-label="דגם 4"></button>
+              </div>
+
+              <p class="desc">הדגל של רוברוק: זרוע צדדית נשלפת, שטיפה בלחץ, ותחנה שמכבסת ומייבשת את המגבת בחום.</p>
+
+              <div class="barcode">
+                <span class="bars" aria-hidden="true"></span>
+                <span class="code">CODE<br /><bdi>94</bdi></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ copy column ============ -->
+      <div class="copy">
+        <span class="rule">הרובוטים שנמכרים בישראל, במקום אחד</span>
+
+        <h1>כל רובוט שנמכר כאן,<br /><span class="on">והמחיר בכל חנות</span></h1>
+
+        <p class="lede">ריכזנו את הדגמים, השווינו מחירים בין KSP, Ivory, זאפ ואמזון, ובדקנו מי בכלל מתקן אותם בארץ.</p>
+
+        <div class="strip">
+          <div class="name">
+            <span class="pill">שואבי אבק רובוטיים</span>
+            <p>Roborock S8 MaxV Ultra</p>
+          </div>
+          <div style="text-align:center">
+            <p class="k">ציון</p>
+            <p class="v"><bdi>9.4</bdi></p>
+          </div>
+          <span class="sep"></span>
+          <div>
+            <p class="k">הכי זול ב-Amazon</p>
+            <p class="v accent"><bdi>‏6,290 ₪</bdi></p>
+          </div>
+        </div>
+
+        <div class="btns">
+          <a class="btn btn-solid" href="#">השווה מחירים</a>
+          <a class="btn btn-outline" href="#">ענה על 4 שאלות</a>
+        </div>
+
+        <div class="article">
+          <div class="row">
+            <span class="mark">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <rect x="3.5" y="6" width="17" height="13" rx="4.5" stroke="currentColor" stroke-width="1.6"/>
+                <circle cx="9" cy="12.5" r="1.5" fill="currentColor"/><circle cx="15" cy="12.5" r="1.5" fill="currentColor"/>
+              </svg>
+            </span>
+            <button class="chip-accent">למדריך</button>
+            <span class="date"><bdi>28.7.2026</bdi></span>
+          </div>
+          <span class="pill" style="margin-top:1rem">שואבי אבק רובוטיים</span>
+          <p>מה באמת משנה בקטגוריה הזאת, ומה רק נשמע טוב על הקופסה</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -72,7 +72,7 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
   return (
     <section
       {...containerProps}
-      className="relative isolate flex min-h-[46rem] items-center overflow-hidden pb-20 pt-32 lg:h-[100svh] lg:min-h-[48rem]"
+      className="relative isolate flex items-center overflow-hidden pb-24 pt-32 lg:min-h-[100svh] lg:pb-20"
       aria-roledescription="carousel"
       aria-label="הדגמים המובילים"
     >
@@ -115,40 +115,36 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
           <div
             {...entrance(ready, 120, "order-2 mx-auto w-full max-w-[20rem] lg:order-1")}
           >
-            <TicketCard>
-              {/* The accent plane, inset inside the grey shell, holding the
-                  artwork inset inside itself — the reference's three nested
-                  cards. */}
-              <div className="mx-3 rounded-[1.6rem] bg-accent p-2.5 pt-7">
+            <TicketCard
+              media={
                 <ProductImage
                   src={robot.hero_image}
                   alt={robot.name}
                   priority
-                  className="aspect-[4/5] rounded-[1.3rem] bg-background"
+                  className="aspect-[4/5] rounded-[1.3rem] rounded-ss-none"
                 />
-
-                <div className="flex items-center justify-between gap-3 px-2 py-3">
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-base font-semibold text-accent-foreground">
-                      {robot.name}
-                    </span>
+              }
+              footer={
+                <div className="flex items-center justify-between gap-3 px-1.5 pb-1">
+                  <span className="min-w-0 flex-1 truncate text-base font-semibold">
+                    {robot.name}
                   </span>
                   <ArrowButton
                     asChild
                     size="md"
-                    variant="solid"
+                    variant="outline"
                     direction="diagonal"
                     label={`לעמוד ${robot.name}`}
-                    className="border-0 bg-light-foreground text-light"
+                    className="border-accent-foreground/50 hover:border-accent-foreground"
                   >
                     <Link to={`/robot/${robot.slug}`} />
                   </ArrowButton>
                 </div>
-              </div>
-
+              }
+            >
               {/* carousel dots */}
               <div
-                className="mt-4 flex justify-center gap-2"
+                className="mt-4 flex justify-center gap-2.5"
                 role="tablist"
                 aria-label="בחירת דגם"
               >
@@ -170,13 +166,13 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
                 ))}
               </div>
 
-              <p className="mt-4 px-5 text-[0.8rem] leading-6 text-light-foreground/75 line-clamp-2">
+              <p className="mt-4 px-1 text-[0.8rem] leading-6 text-light-foreground/75 line-clamp-2">
                 {robot.summary}
               </p>
 
               <Barcode
                 code={String(robot.score ?? 0).replace(".", "")}
-                className="mt-4 px-5"
+                className="mt-4 px-1"
               />
             </TicketCard>
           </div>
@@ -272,45 +268,6 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
           </div>
         </div>
 
-        {/* ---------- price-comparison card ----------
-            Kept in normal flow rather than floated over the artwork: at this
-            layout's widths an absolutely positioned card lands on top of the
-            render and collides with the copy column. */}
-        <div
-          {...entrance(
-            ready,
-            700,
-            "mt-12 flex max-w-xl items-stretch gap-4 rounded-[1.5rem] border border-white/10 bg-overlay/70 p-4 backdrop-blur-md",
-          )}
-        >
-          <ArrowButton
-            asChild
-            size="sm"
-            variant="solid"
-            direction="diagonal"
-            label="השוואת מחירים בין החנויות"
-            className="self-start border-0"
-          >
-            <Link to={`/robot/${robot.slug}`} />
-          </ArrowButton>
-
-          <div className="min-w-0 flex-1">
-            <p className="text-sm leading-6">
-              {best
-                ? `${robot.offers?.length ?? 0} חנויות מוכרות את הדגם הזה בישראל`
-                : "בקרוב בהשוואת המחירים"}
-            </p>
-            <PillTag className="mt-2">השוואת מחירים</PillTag>
-          </div>
-
-          <div className="hidden w-24 shrink-0 overflow-hidden rounded-[1rem] border border-white/20 sm:block">
-            <ProductImage
-              src={robot.hero_image}
-              alt=""
-              className="size-full"
-            />
-          </div>
-        </div>
       </div>
     </section>
   );

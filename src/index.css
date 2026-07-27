@@ -56,7 +56,10 @@
     /* The single accent. Reserved for the live signal — best price,
        savings, the active step — so it always means the same thing. */
     --accent: 223 99% 72%;
-    --accent-foreground: 0 0% 4%;
+    /* White, not near-black: the reference sets every label that sits on
+       the accent in white — the model name on the card, the "Read More"
+       pill. Dark text on this blue reads as a different, flatter brand. */
+    --accent-foreground: 0 0% 100%;
 
     /* Head-to-head comparison. Blue vs amber, never green vs red, so the
        winner stays readable for the ~8% of men with red/green colour

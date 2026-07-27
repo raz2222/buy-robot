@@ -78,41 +78,124 @@ export function Barcode({
 }
 
 /**
- * The "ticket" card that holds the featured product.
+ * A panel whose top edge steps down — the folder-tab silhouette the
+ * reference gives every layer of its product card.
  *
- * Three nested planes, exactly as the reference stacks them: a light grey
- * shell, an accent card inset inside it, and the artwork inset inside
- * that. The grey shell's top edge steps — a folder tab on the inline-start
- * half, joined to the lower half by an inverted corner. The step is drawn
- * with a radial gradient rather than a fixed `path()`, so the silhouette
- * survives any width.
+ * The edge is high on the inline-start side for `tab` of the width, then
+ * drops by `step`. The concave joint is a radial gradient rather than a
+ * fixed `path()`, so the shape survives any width; a hardcoded path would
+ * not.
  */
-export function TicketCard({
+function NotchedPanel({
+  color,
+  tab,
+  step,
+  radius,
   children,
   className,
 }: {
-  children: ReactNode;
+  /** Any CSS colour — passed through to both the tab and the joint. */
+  color: string;
+  /** Width of the raised half, as a CSS length or percentage. */
+  tab: string;
+  /** How far the edge drops, in rem. */
+  step: number;
+  radius: string;
+  children?: ReactNode;
   className?: string;
 }) {
   return (
     <div className={cn("relative", className)}>
-      {/* the raised half of the top edge */}
-      <div className="absolute start-0 top-0 h-14 w-[56%] rounded-t-[2rem] bg-light" />
-
-      {/* the concave joint down to the lower half */}
-      <span
-        aria-hidden="true"
-        className="absolute start-[56%] top-[1.75rem] size-7"
+      <div
+        className="absolute start-0 top-0"
         style={{
-          background:
-            "radial-gradient(circle at 100% 100%, transparent 0 1.75rem, hsl(var(--light)) 1.75rem)",
+          width: tab,
+          height: `${step + 2}rem`,
+          background: color,
+          borderStartStartRadius: radius,
+          borderStartEndRadius: radius,
         }}
       />
 
-      <div className="relative mt-7 rounded-[2rem] rounded-ss-none bg-light pb-5 text-light-foreground">
+      <span
+        aria-hidden="true"
+        className="absolute"
+        style={{
+          insetInlineStart: tab,
+          top: `${step}rem`,
+          width: "1.5rem",
+          height: "1.5rem",
+          background: `radial-gradient(circle at 100% 100%, transparent 0 1.5rem, ${color} 1.5rem)`,
+        }}
+      />
+
+      <div
+        className="relative"
+        style={{
+          marginTop: `${step}rem`,
+          background: color,
+          borderRadius: radius,
+          borderStartStartRadius: 0,
+        }}
+      >
         {children}
       </div>
     </div>
+  );
+}
+
+/**
+ * The "ticket" card that holds the featured product: three notched planes
+ * cascading into each other — light shell, accent card, artwork — each
+ * stepping a little lower and tabbing a little narrower than the one
+ * above it, exactly as the reference stacks them.
+ */
+export function TicketCard({
+  media,
+  footer,
+  children,
+  className,
+}: {
+  /** The artwork, rendered inside the innermost notched plane. */
+  media: ReactNode;
+  /** The row under the artwork, inside the accent plane. */
+  footer: ReactNode;
+  /** Everything below the accent plane, on the light shell. */
+  children?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <NotchedPanel
+      color="hsl(var(--light))"
+      tab="62%"
+      step={1.75}
+      radius="2rem"
+      className={cn("text-light-foreground", className)}
+    >
+      <div className="px-3 pb-5 pt-1">
+        <NotchedPanel
+          color="hsl(var(--accent))"
+          tab="54%"
+          step={1.5}
+          radius="1.6rem"
+        >
+          <div className="px-2.5 pb-2.5">
+            <NotchedPanel
+              color="hsl(var(--background))"
+              tab="46%"
+              step={1.25}
+              radius="1.3rem"
+            >
+              {media}
+            </NotchedPanel>
+
+            <div className="pt-3 text-accent-foreground">{footer}</div>
+          </div>
+        </NotchedPanel>
+
+        {children}
+      </div>
+    </NotchedPanel>
   );
 }
 
