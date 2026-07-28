@@ -72,7 +72,7 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
   return (
     <section
       {...containerProps}
-      className="relative isolate flex items-center overflow-hidden pb-24 pt-32 lg:min-h-[100svh] lg:pb-20"
+      className="relative isolate flex items-center overflow-hidden pb-20 pt-28 lg:min-h-[100svh] lg:pb-16"
       aria-roledescription="carousel"
       aria-label="הדגמים המובילים"
     >
@@ -86,16 +86,20 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
         aria-hidden="true"
         className="pointer-events-none absolute -z-10 select-none"
         style={{
-          insetInlineEnd: "-6%",
-          top: "12%",
-          width: "min(62vw, 46rem)",
+          // Bleeds off the inline-end edge *and* the top, the way the
+          // reference crops its render — a subject fully inside the frame
+          // reads as an illustration; one that leaves the frame reads as
+          // scale.
+          insetInlineEnd: "-14%",
+          top: "-8%",
+          width: "min(78vw, 62rem)",
           transform: `translate3d(0, ${scroll * 0.14}px, 0)`,
         }}
       >
         <img
           src="/images/cutouts/vacuum-a.png"
           alt=""
-          className="w-full opacity-[0.55] [filter:grayscale(0.35)_brightness(0.8)] lg:opacity-80"
+          className="w-full opacity-40 [filter:grayscale(0.6)_brightness(0.55)_contrast(1.15)] lg:opacity-[0.72]"
         />
         {/* Sinks the render's near edge into the canvas so it reads as
             bleeding out of the page rather than as a pasted box. */}
@@ -170,6 +174,23 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
                 {robot.summary}
               </p>
 
+              {/* The commercial payload. The reference has only a serial
+                  here, but this is a price-comparison site — the cheapest
+                  price is the reason the card exists. */}
+              <div className="mt-4 flex items-end justify-between gap-3 border-t border-light-foreground/15 px-1 pt-3">
+                <div className="min-w-0">
+                  <p className="truncate text-[0.7rem] text-light-foreground/60">
+                    {best ? `הכי זול ב-${best.store?.name}` : "מחיר משוער"}
+                  </p>
+                  <p className="text-lg font-semibold tabular-nums">
+                    <bdi>{formatPrice(robot.price_from)}</bdi>
+                  </p>
+                </div>
+                <PillTag className="border-light-foreground/30 text-light-foreground">
+                  <bdi>{robot.score?.toFixed(1) ?? "—"}</bdi>
+                </PillTag>
+              </div>
+
               <Barcode
                 code={String(robot.score ?? 0).replace(".", "")}
                 className="mt-4 px-1"
@@ -190,7 +211,7 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
               {...entrance(
                 ready,
                 180,
-                "mt-7 max-w-2xl text-balance text-[2.4rem] font-medium leading-[1.12] sm:text-[3rem] lg:text-[3.6rem]",
+                "mt-8 max-w-[19ch] text-balance text-[2.6rem] font-medium leading-[1.1] sm:text-[3.4rem] lg:text-[4.2rem]",
               )}
             >
               כל רובוט שנמכר כאן,
@@ -202,48 +223,14 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
               {...entrance(
                 ready,
                 280,
-                "mt-6 max-w-md text-base leading-8 text-muted-foreground",
+                "mt-7 max-w-md text-base leading-8 text-muted-foreground",
               )}
             >
               ריכזנו את הדגמים, השווינו מחירים בין KSP, Ivory, זאפ ואמזון,
               ובדקנו מי בכלל מתקן אותם בארץ.
             </p>
 
-            {/* ---------- the rotating product strip ---------- */}
-            <div
-              {...entrance(
-                ready,
-                380,
-                "mt-10 flex w-full max-w-xl flex-wrap items-center gap-x-8 gap-y-5 rounded-[1.5rem] border border-white/10 bg-surface/70 p-5 backdrop-blur-md",
-              )}
-            >
-              <div className="min-w-0 flex-[2] basis-48">
-                <PillTag className="mb-2">{robot.category?.name ?? "מומלץ"}</PillTag>
-                <p className="truncate text-lg font-medium" dir="ltr">
-                  {robot.name}
-                </p>
-              </div>
-
-              <div className="text-center">
-                <p className="text-[0.7rem] text-muted-foreground">ציון</p>
-                <p className="text-2xl font-medium tabular-nums">
-                  <bdi>{robot.score?.toFixed(1) ?? "—"}</bdi>
-                </p>
-              </div>
-
-              <span className="h-9 w-px bg-white/15" />
-
-              <div>
-                <p className="text-[0.7rem] text-muted-foreground">
-                  {best ? `הכי זול ב-${best.store?.name}` : "בקרוב"}
-                </p>
-                <p className="text-2xl font-medium tabular-nums text-accent">
-                  <bdi>{formatPrice(robot.price_from)}</bdi>
-                </p>
-              </div>
-            </div>
-
-            <div {...entrance(ready, 460, "mt-8 flex flex-wrap items-center gap-3")}>
+            <div {...entrance(ready, 460, "mt-10 flex flex-wrap items-center gap-3")}>
               <Button asChild size="lg">
                 <Link to={`/robot/${robot.slug}`}>השווה מחירים</Link>
               </Button>
@@ -253,7 +240,7 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
             </div>
 
             {/* ---------- editorial specimen ---------- */}
-            <div {...entrance(ready, 560, "mt-10 max-w-sm")}>
+            <div {...entrance(ready, 560, "mt-8 max-w-sm")}>
               <ArticleCard
                 tag={robot.category?.name ?? "מדריך קנייה"}
                 date={new Date().toLocaleDateString("he-IL")}
