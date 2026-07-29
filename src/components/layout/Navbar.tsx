@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X } from "lucide-react";
+import { Sparkles, X } from "lucide-react";
 import { ArrowButton } from "@/components/ui/arrow-button";
+import { Button } from "@/components/ui/button";
 import { CategoryIcon } from "@/components/ui/category-icon";
 import { Logo } from "@/components/layout/Logo";
 import { useCategories } from "@/data/queries";
@@ -99,16 +100,15 @@ export function Navbar() {
             </div>
           </form>
 
-          <ArrowButton
-            asChild
-            size="md"
-            variant="accent"
-            direction="diagonal"
-            label="מצא את הרובוט שלי"
-            className="sm:hidden"
-          >
-            <Link to="/find-my-robot" />
-          </ArrowButton>
+          {/* A bare circle with an arrow does not read as a control — it
+              needs a word. The label shortens rather than disappearing so
+              the action is always named. */}
+          <Button asChild size="sm" variant="accent" className="shrink-0 sm:hidden">
+            <Link to="/find-my-robot">
+              <Sparkles className="size-4" />
+              התאמה
+            </Link>
+          </Button>
         </div>
       </header>
 

@@ -1,4 +1,4 @@
-import { forwardRef, useRef, useState } from "react";
+import { Children, cloneElement, forwardRef, isValidElement, useRef, useState } from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { ArrowLeft, ArrowUpLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,7 @@ export const ArrowButton = forwardRef<HTMLButtonElement, ArrowButtonProps>(
       variant = "outline",
       direction = "back",
       label,
+      children,
       ...props
     },
     forwardedRef,
@@ -72,6 +73,43 @@ export const ArrowButton = forwardRef<HTMLButtonElement, ArrowButtonProps>(
 
     const Icon = direction === "diagonal" ? ArrowUpLeft : ArrowLeft;
 
+    /* The icon slides out and a second one slides in behind it, so the
+       arrow reads as "leaving" rather than just changing colour. */
+    const glyphs = (
+      <span className="relative grid size-full place-items-center overflow-hidden rounded-full">
+        <Icon
+          className={cn(
+            "absolute transition-transform duration-500 ease-smooth",
+            direction === "diagonal"
+              ? "group-hover/arrow:-translate-x-5 group-hover/arrow:-translate-y-5"
+              : "group-hover/arrow:-translate-x-6",
+          )}
+        />
+        <Icon
+          className={cn(
+            "absolute transition-transform duration-500 ease-smooth",
+            direction === "diagonal"
+              ? "translate-x-5 translate-y-5 group-hover/arrow:translate-x-0 group-hover/arrow:translate-y-0"
+              : "translate-x-6 group-hover/arrow:translate-x-0",
+          )}
+        />
+      </span>
+    );
+
+    /* With `asChild`, Slot renders the caller's element — so the glyphs have
+       to be placed *inside* that element. Rendering them as Slot's own
+       children instead would make Slot adopt the glyph wrapper and silently
+       drop the caller's <Link>, leaving a circle that looks like a button
+       and navigates nowhere. */
+    const body =
+      asChild && isValidElement(children)
+        ? cloneElement(
+            Children.only(children) as React.ReactElement,
+            undefined,
+            glyphs,
+          )
+        : glyphs;
+
     return (
       <Comp
         ref={(node: HTMLButtonElement | null) => {
@@ -92,26 +130,7 @@ export const ArrowButton = forwardRef<HTMLButtonElement, ArrowButtonProps>(
         )}
         {...props}
       >
-        {/* The icon slides out and a second one slides in behind it, so the
-            arrow reads as "leaving" rather than just changing colour. */}
-        <span className="relative grid size-full place-items-center overflow-hidden rounded-full">
-          <Icon
-            className={cn(
-              "absolute transition-transform duration-500 ease-smooth",
-              direction === "diagonal"
-                ? "group-hover/arrow:-translate-x-5 group-hover/arrow:-translate-y-5"
-                : "group-hover/arrow:-translate-x-6",
-            )}
-          />
-          <Icon
-            className={cn(
-              "absolute transition-transform duration-500 ease-smooth",
-              direction === "diagonal"
-                ? "translate-x-5 translate-y-5 group-hover/arrow:translate-x-0 group-hover/arrow:translate-y-0"
-                : "translate-x-6 group-hover/arrow:translate-x-0",
-            )}
-          />
-        </span>
+        {body}
       </Comp>
     );
   },
