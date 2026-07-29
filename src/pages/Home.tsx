@@ -1,5 +1,5 @@
 import { Hero } from "@/components/sections/Hero";
-import { SearchBand } from "@/components/sections/SearchBand";
+import { RobotFinder } from "@/components/sections/RobotFinder";
 import { TopPicks } from "@/components/sections/TopPicks";
 import { CategoryStrip } from "@/components/sections/CategoryStrip";
 import { CompareLab } from "@/components/sections/CompareLab";
@@ -22,7 +22,9 @@ export default function Home() {
   return (
     <>
       <Hero robots={featured} />
-      <SearchBand />
+      <section id="finder" className="border-b border-white/10 bg-background">
+        <RobotFinder embedded />
+      </section>
       <TopPicks />
       <CompareLab />
       <CategoryStrip />

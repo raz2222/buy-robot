@@ -9,7 +9,29 @@ import { Logo } from "@/components/layout/Logo";
 import { useCategories } from "@/data/queries";
 import { cn } from "@/lib/utils";
 
+/**
+ * The primary nav sticks to home robotics with clear purchase intent — no
+ * industrial arms, no "business robots", no general robotics news. Each
+ * entry routes to a real category page or a real destination; nothing here
+ * is decorative.
+ */
 const LINKS = [
+  { to: "/category/robot-vacuums", label: "שואבים ושוטפים" },
+  { to: "/category/window-cleaners", label: "מנקי חלונות" },
+  { to: "/category/lawn-mowers", label: "מכסחות דשא" },
+  { to: "/category/pool-cleaners", label: "רובוטים לבריכה" },
+  { to: "/category/companions", label: "רובוטים לחיות" },
+  { to: "/category/kids-robots", label: "רובוטים לילדים" },
+  { to: "/comparisons", label: "השוואות" },
+  { to: "/guides", label: "מדריכים" },
+];
+
+/** The drawer's "ניווט" column is site-level destinations, not a repeat of
+ * the category grid it sits beside — that grid already lists every category
+ * from the database. */
+const DRAWER_LINKS = [
+  { to: "/", label: "בית" },
+  { to: "/comparisons", label: "השוואות" },
   { to: "/guides", label: "מדריכים" },
   { to: "/humanoids", label: "הומנואידים" },
   { to: "/repair", label: "תיקונים" },
@@ -56,7 +78,7 @@ export function Navbar() {
 
           <Logo className="shrink-0" />
 
-          <nav className="ms-6 hidden items-center gap-7 lg:flex">
+          <nav className="scrollbar-none ms-6 hidden items-center gap-4 overflow-x-auto xl:flex xl:gap-6">
             {LINKS.map((link) => (
               <NavLink
                 key={link.to}
@@ -65,7 +87,7 @@ export function Navbar() {
                   cn(
                     // The underline grows from the inline-start edge rather
                     // than fading in — reads as drawn, not toggled.
-                    "relative py-1 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground",
+                    "relative shrink-0 py-1 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground",
                     "after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-[100%_50%] after:scale-x-0 after:bg-accent after:transition-transform after:duration-500 after:ease-smooth hover:after:scale-x-100",
                     isActive && "text-foreground after:scale-x-100",
                   )
@@ -182,7 +204,7 @@ function FullMenu({
                 ניווט
               </p>
               <ul className="space-y-1">
-                {[{ to: "/", label: "בית" }, ...LINKS].map((link, index) => (
+                {DRAWER_LINKS.map((link, index) => (
                   <li
                     key={link.to}
                     className="animate-fade-up"

@@ -64,6 +64,15 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
     };
   }, []);
 
+  // Smoothly brings the embedded calculator into view — respects a
+  // visitor's reduced-motion preference instead of forcing the animation.
+  const scrollToFinder = () => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document
+      .getElementById("finder")
+      ?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
+
   if (robots.length === 0) return <div className="h-screen" />;
 
   const robot = robots[index];
@@ -214,9 +223,9 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
                 "mt-8 max-w-[19ch] text-balance text-[2.6rem] font-medium leading-[1.1] sm:text-[3.4rem] lg:text-[4.2rem]",
               )}
             >
-              כל רובוט שנמכר כאן,
+              משווים רובוטים ביתיים.
               <br />
-              <span className="text-accent">והמחיר בכל חנות</span>
+              <span className="text-accent">קונים נכון.</span>
             </h1>
 
             <p
@@ -226,16 +235,16 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
                 "mt-7 max-w-md text-base leading-8 text-muted-foreground",
               )}
             >
-              ריכזנו את הדגמים, השווינו מחירים בין KSP, Ivory, זאפ ואמזון,
-              ובדקנו מי בכלל מתקן אותם בארץ.
+              ענו על כמה שאלות וקבלו התאמה אישית של הרובוטים המתאימים ביותר
+              לבית, לצרכים ולתקציב שלכם.
             </p>
 
             <div {...entrance(ready, 460, "mt-10 flex flex-wrap items-center gap-3")}>
-              <Button asChild size="lg">
-                <Link to={`/robot/${robot.slug}`}>השווה מחירים</Link>
+              <Button size="lg" onClick={scrollToFinder}>
+                התחילו התאמה אישית
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link to="/find-my-robot">ענה על 4 שאלות</Link>
+                <Link to="/comparisons">לכל ההשוואות</Link>
               </Button>
             </div>
 

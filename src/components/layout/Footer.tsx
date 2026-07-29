@@ -12,6 +12,7 @@ const COMPANY = [
 
 const TOOLS = [
   { to: "/find-my-robot", label: "מצא את הרובוט שלי" },
+  { to: "/comparisons", label: "השוואות" },
   { to: "/guides", label: "מדריכי קנייה" },
   { to: "/humanoids", label: "רשימת המתנה — הומנואידים" },
   { to: "/repair", label: "בקשת תיקון" },
