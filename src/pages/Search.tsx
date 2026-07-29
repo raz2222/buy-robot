@@ -60,7 +60,7 @@ export default function Search() {
             ))}
           </div>
         ) : total === 0 ? (
-          <div className="mt-16 rounded-card border border-dashed border-border p-12 text-center">
+          <div className="mt-16 rounded-[1.5rem] border border-dashed border-white/10 p-12 text-center">
             <p className="text-base font-medium">לא מצאנו התאמה</p>
             <p className="mt-2 text-sm text-muted-foreground">
               אפשר לנסות מונח אחר, או לענות על ארבע שאלות ולקבל המלצה אישית.

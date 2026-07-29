@@ -2,16 +2,16 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1.5 rounded-chip px-3 py-1 text-xs font-medium leading-5",
+  "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium leading-5",
   {
     variants: {
       variant: {
         /** Category chip that sits on top of card artwork. */
         default: "bg-background text-foreground shadow-sm",
-        outline: "border border-border bg-background text-muted-foreground",
+        outline: "border border-white/10 bg-background text-muted-foreground",
         solid: "bg-foreground text-background",
-        signal: "bg-signal/10 text-signal",
-        muted: "bg-muted text-muted-foreground",
+        signal: "bg-accent/10 text-accent",
+        muted: "bg-white/5 text-muted-foreground",
       },
     },
     defaultVariants: { variant: "default" },

@@ -27,12 +27,12 @@ export default function Repair() {
 
   return (
     <>
-      <section className="bg-ink pb-16 pt-28 text-ink-foreground md:pb-20 md:pt-36">
+      <section className="pb-16 pt-28 md:pb-20 md:pt-36">
         <div className="container max-w-3xl">
           <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
             הרובוט שלך תקוע? נמצא מי שיתקן
           </h1>
-          <p className="mt-5 text-base leading-8 text-ink-muted">
+          <p className="mt-5 text-base leading-8 text-muted-foreground">
             רוב התקלות ברובוטים ביתיים — סוללה, גלגל, חיישן, מברשת — הן תיקון
             של שעה במעבדה, ועולות הרבה פחות מדגם חדש. הבעיה היא למצוא את מי
             שמתעסק עם הדגם שלכם, במיוחד אחרי יבוא אישי.
@@ -62,7 +62,7 @@ export default function Repair() {
               ))}
             </ol>
 
-            <div className="mt-12 rounded-card bg-surface p-6">
+            <div className="mt-12 rounded-[1.5rem] bg-surface p-6">
               <p className="text-sm leading-7 text-muted-foreground">
                 <strong className="font-medium text-foreground">שקיפות:</strong>{" "}
                 אנחנו לא מתקנים בעצמנו. אנחנו מעבירים את הפנייה לטכנאים
@@ -72,7 +72,7 @@ export default function Repair() {
           </div>
 
           <Reveal delay={120}>
-            <div className="rounded-card border border-border p-7">
+            <div className="rounded-[1.5rem] border border-white/10 p-7">
               <h2 className="text-xl font-semibold">פרטי הפנייה</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 נחזור אליכם תוך יום עסקים.

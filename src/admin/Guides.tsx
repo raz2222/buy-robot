@@ -20,8 +20,8 @@ export default function Guides() {
       {isLoading ? (
         <p className="text-sm text-muted-foreground">טוען…</p>
       ) : (
-        <div className="overflow-hidden rounded-card border border-border bg-background">
-          <ul className="divide-y divide-border">
+        <div className="overflow-hidden rounded-[1.5rem] border border-white/10 bg-background">
+          <ul className="divide-y divide-white/10">
             {guides.map((guide) => (
               <li
                 key={guide.id}
@@ -48,8 +48,8 @@ export default function Guides() {
                   className={cn(
                     "min-h-11 rounded-full border px-4 text-xs transition-colors",
                     guide.status === "published"
-                      ? "border-signal/30 bg-signal/10 text-signal"
-                      : "border-border text-muted-foreground",
+                      ? "border-accent/30 bg-accent/10 text-accent"
+                      : "border-white/10 text-muted-foreground",
                   )}
                 >
                   {guide.status === "published" ? "מפורסם" : "טיוטה"}

@@ -34,30 +34,30 @@ export default function Robot() {
   return (
     <>
       {/* ---------- masthead ---------- */}
-      <section className="bg-ink pb-14 pt-28 text-ink-foreground md:pb-20 md:pt-32">
+      <section className="relative overflow-hidden pb-14 pt-28 md:pb-20 md:pt-32">
         <div className="container">
-          <nav aria-label="פירורי לחם" className="mb-8 flex items-center gap-1 text-xs text-ink-muted">
-            <Link to="/" className="hover:text-ink-foreground">בית</Link>
+          <nav aria-label="פירורי לחם" className="mb-8 flex items-center gap-1 text-xs text-muted-foreground">
+            <Link to="/" className="hover:text-foreground">בית</Link>
             <ChevronLeft className="size-3" />
             {robot.category && (
               <>
                 <Link
                   to={`/category/${robot.category.slug}`}
-                  className="hover:text-ink-foreground"
+                  className="hover:text-foreground"
                 >
                   {robot.category.name}
                 </Link>
                 <ChevronLeft className="size-3" />
               </>
             )}
-            <span className="text-ink-foreground">{robot.name}</span>
+            <span className="text-foreground">{robot.name}</span>
           </nav>
 
           <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
             <div>
               <Badge
                 variant="outline"
-                className="border-ink-foreground/25 bg-ink-foreground/10 text-ink-foreground"
+                className="border-white/25 bg-white/10 text-foreground"
               >
                 {robot.brand}
               </Badge>
@@ -66,28 +66,28 @@ export default function Robot() {
                 {robot.name}
               </h1>
 
-              <p className="mt-5 max-w-xl text-base leading-8 text-ink-muted">
+              <p className="mt-5 max-w-xl text-base leading-8 text-muted-foreground">
                 {robot.summary}
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5">
                 <div className="flex items-center gap-3">
-                  <ScoreBadge score={robot.score} size="lg" className="text-ink-foreground" />
+                  <ScoreBadge score={robot.score} size="lg" className="text-foreground" />
                   <div className="text-sm leading-5">
                     <p className="font-medium">הציון שלנו</p>
                     <Link
                       to="/methodology"
-                      className="text-ink-muted underline underline-offset-4 hover:text-ink-foreground"
+                      className="text-muted-foreground underline underline-offset-4 hover:text-foreground"
                     >
                       איך חישבנו
                     </Link>
                   </div>
                 </div>
 
-                <div className="h-10 w-px bg-ink-foreground/15" />
+                <div className="h-10 w-px bg-white/15" />
 
                 <div className="text-sm leading-5">
-                  <p className="text-ink-muted">
+                  <p className="text-muted-foreground">
                     {offer?.store ? `הכי זול ב-${offer.store.name}` : "מחיר משוער"}
                   </p>
                   <p className="mt-1 text-2xl font-semibold">
@@ -96,7 +96,7 @@ export default function Robot() {
                 </div>
 
                 {saving > 0 && (
-                  <Badge variant="solid" className="bg-signal text-signal-foreground">
+                  <Badge variant="solid" className="bg-accent text-accent-foreground">
                     השוואה חוסכת עד <bdi>{formatPrice(saving)}</bdi>
                   </Badge>
                 )}
@@ -114,7 +114,7 @@ export default function Robot() {
       </section>
 
       {/* ---------- price comparison ---------- */}
-      <section className="border-b border-border bg-background py-14 md:py-20">
+      <section className="border-b border-white/10 bg-background py-14 md:py-20">
         <div className="container">
           <Reveal>
             <h2 className="text-2xl font-semibold sm:text-3xl">
@@ -140,7 +140,7 @@ export default function Robot() {
                 <ul className="space-y-3">
                   {robot.pros.map((pro) => (
                     <li key={pro} className="flex gap-3 text-sm leading-6">
-                      <Check className="mt-0.5 size-4 shrink-0 text-signal" />
+                      <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                       {pro}
                     </li>
                   ))}
@@ -162,7 +162,7 @@ export default function Robot() {
             {specs.length > 0 && (
               <Reveal className="mt-14">
                 <h2 className="text-2xl font-semibold sm:text-3xl">מפרט</h2>
-                <dl className="mt-8 divide-y divide-border border-y border-border">
+                <dl className="mt-8 divide-y divide-white/10 border-y border-white/10">
                   {specs.map(([key, value]) => (
                     <div
                       key={key}
@@ -181,7 +181,7 @@ export default function Robot() {
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div
               id="waitlist"
-              className="scroll-mt-28 rounded-card border border-border p-6"
+              className="scroll-mt-28 rounded-[1.5rem] border border-white/10 bg-surface p-6"
             >
               <h3 className="text-base font-semibold">שומרים על המחיר בעין</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
@@ -198,7 +198,7 @@ export default function Robot() {
               </div>
             </div>
 
-            <div className="mt-4 rounded-card bg-surface p-6">
+            <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-surface p-6">
               <h3 className="text-base font-semibold">לא בטוח שזה הדגם הנכון?</h3>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
                 ארבע שאלות קצרות ונמליץ על שלושה דגמים שמתאימים לבית שלך.
@@ -236,11 +236,11 @@ export default function Robot() {
 
 function RobotSkeleton() {
   return (
-    <div className="bg-ink pb-20 pt-32">
+    <div className="pb-20 pt-32">
       <div className="container">
-        <div className="h-6 w-40 rounded bg-ink-foreground/10" />
-        <div className="mt-6 h-12 w-2/3 rounded bg-ink-foreground/10" />
-        <div className="mt-5 h-5 w-1/2 rounded bg-ink-foreground/10" />
+        <div className="h-6 w-40 rounded bg-white/10" />
+        <div className="mt-6 h-12 w-2/3 rounded bg-white/10" />
+        <div className="mt-5 h-5 w-1/2 rounded bg-white/10" />
       </div>
     </div>
   );

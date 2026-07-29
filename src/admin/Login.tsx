@@ -47,7 +47,7 @@ export default function AdminLogin() {
 
         <form
           onSubmit={onSubmit}
-          className="mt-8 rounded-card border border-border bg-background p-7"
+          className="mt-8 rounded-[1.5rem] border border-white/10 bg-background p-7"
         >
           <h1 className="text-lg font-semibold">כניסה לניהול</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -64,7 +64,7 @@ export default function AdminLogin() {
             autoComplete="username"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="mt-2 h-12 w-full rounded-full border border-input bg-background px-5 text-start text-sm outline-none transition-colors focus:border-foreground"
+            className="mt-2 h-12 w-full rounded-full border border-white/20 bg-background px-5 text-start text-sm outline-none transition-colors focus:border-foreground"
           />
 
           <label htmlFor="admin-password" className="mt-4 block text-sm font-medium">
@@ -77,7 +77,7 @@ export default function AdminLogin() {
             autoComplete="current-password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="mt-2 h-12 w-full rounded-full border border-input bg-background px-5 text-start text-sm outline-none transition-colors focus:border-foreground"
+            className="mt-2 h-12 w-full rounded-full border border-white/20 bg-background px-5 text-start text-sm outline-none transition-colors focus:border-foreground"
           />
 
           {error && (

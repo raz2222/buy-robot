@@ -12,13 +12,13 @@ export function ProsePage({
 }) {
   return (
     <>
-      <section className="bg-ink pb-14 pt-28 text-ink-foreground md:pb-16 md:pt-36">
+      <section className="pb-14 pt-28 md:pb-16 md:pt-36">
         <div className="container max-w-3xl">
           <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
             {title}
           </h1>
           {intro && (
-            <p className="mt-5 text-base leading-8 text-ink-muted">{intro}</p>
+            <p className="mt-5 text-base leading-8 text-muted-foreground">{intro}</p>
           )}
         </div>
       </section>

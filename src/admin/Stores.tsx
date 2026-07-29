@@ -75,7 +75,7 @@ function StoreRow({ store }: { store: StoreAdmin }) {
   };
 
   return (
-    <section className="rounded-card border border-border bg-background p-6">
+    <section className="rounded-[1.5rem] border border-white/10 bg-background p-6">
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-sm font-semibold">{store.name}</h2>
         <span className="text-xs text-muted-foreground" dir="ltr">
@@ -120,7 +120,7 @@ function StoreRow({ store }: { store: StoreAdmin }) {
         </div>
       </div>
 
-      <div className="mt-4 rounded-card bg-muted p-4">
+      <div className="mt-4 rounded-[1.5rem] bg-white/5 p-4">
         <p className="text-xs font-medium">תצוגה מקדימה</p>
         <p className="mt-1.5 break-all text-xs text-muted-foreground" dir="ltr">
           {preview}
@@ -132,7 +132,7 @@ function StoreRow({ store }: { store: StoreAdmin }) {
           {update.isPending && <Loader2 className="size-4 animate-spin" />}
           שמירה
         </Button>
-        {saved && <span className="text-sm text-signal">נשמר</span>}
+        {saved && <span className="text-sm text-accent">נשמר</span>}
       </div>
     </section>
   );
@@ -163,7 +163,7 @@ function Field({
         dir={ltr ? "ltr" : undefined}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 w-full rounded-full border border-input bg-background px-5 text-start text-sm outline-none focus:border-foreground"
+        className="h-12 w-full rounded-full border border-white/20 bg-background px-5 text-start text-sm outline-none focus:border-foreground"
       />
       {hint && <p className="mt-1.5 text-xs text-muted-foreground">{hint}</p>}
     </div>

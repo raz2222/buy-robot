@@ -65,7 +65,7 @@ export function LeadForm({
         role="status"
         className={cn(
           "flex items-center gap-3 rounded-full px-6 py-4",
-          dark ? "bg-ink-foreground/10 text-ink-foreground" : "bg-signal/10 text-signal",
+          dark ? "bg-white/10 text-foreground" : "bg-accent/10 text-accent",
           className,
         )}
       >
@@ -82,7 +82,7 @@ export function LeadForm({
       <div
         className={cn(
           "flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2 sm:rounded-full sm:p-1.5",
-          dark ? "sm:bg-ink-foreground/10" : "sm:bg-background sm:shadow-card",
+          dark ? "sm:bg-white/10" : "sm:bg-background sm:shadow-card",
         )}
       >
         <label className="sr-only" htmlFor={`lead-${type}`}>
@@ -102,8 +102,8 @@ export function LeadForm({
           className={cn(
             "h-12 flex-1 rounded-full px-5 text-start text-sm outline-none transition-colors",
             dark
-              ? "bg-ink-foreground/10 text-ink-foreground placeholder:text-ink-muted sm:bg-transparent"
-              : "border border-input bg-background text-foreground placeholder:text-muted-foreground sm:border-transparent",
+              ? "bg-white/10 text-foreground placeholder:text-muted-foreground sm:bg-transparent"
+              : "border border-white/20 bg-background text-foreground placeholder:text-muted-foreground sm:border-transparent",
           )}
         />
         <Button
@@ -124,7 +124,7 @@ export function LeadForm({
           role="alert"
           className={cn(
             "mt-3 ps-5 text-sm",
-            dark ? "text-ink-foreground" : "text-foreground",
+            dark ? "text-foreground" : "text-foreground",
           )}
         >
           {error}

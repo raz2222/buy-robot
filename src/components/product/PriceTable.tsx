@@ -1,6 +1,6 @@
 import { ExternalLink } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PillTag } from "@/components/ui/deco";
 import { offerLink } from "@/lib/affiliate";
 import { formatPrice } from "@/lib/format";
 import { sortedOffers } from "@/lib/offers";
@@ -22,10 +22,10 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
 
   if (offers.length === 0) {
     return (
-      <div className="rounded-card border border-dashed border-border p-8 text-center">
+      <div className="rounded-[1.5rem] border border-dashed border-white/20 p-8 text-center">
         <p className="text-sm text-muted-foreground">
           הדגם הזה עדיין לא נמכר בישראל.{" "}
-          <a href="#waitlist" className="font-medium text-foreground underline">
+          <a href="#waitlist" className="font-medium text-accent underline underline-offset-4">
             נעדכן אתכם כשהוא יגיע
           </a>
           .
@@ -44,7 +44,7 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
           השוואת מחירים ל־{robot.name} בין החנויות בישראל
         </caption>
         <thead>
-          <tr className="border-b border-border text-xs text-muted-foreground">
+          <tr className="border-b border-white/10 text-xs text-muted-foreground">
             <th scope="col" className="py-3 text-start font-medium">חנות</th>
             <th scope="col" className="py-3 text-start font-medium">מחיר</th>
             <th scope="col" className="py-3 text-start font-medium">משלוח</th>
@@ -58,17 +58,17 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
           {offers.map((offer) => (
             <tr
               key={offer.id}
-              className="border-b border-border transition-colors duration-200 hover:bg-muted/60"
+              className="border-b border-white/10 transition-colors duration-300 hover:bg-white/[0.04]"
             >
               <td className="py-5">
                 <div className="flex items-center gap-3">
                   <span className="font-medium">{offer.store?.name ?? "חנות"}</span>
                   {offer.id === cheapest.id && offer.in_stock && (
-                    <Badge variant="signal">הכי זול</Badge>
+                    <PillTag tone="accent">הכי זול</PillTag>
                   )}
                 </div>
               </td>
-              <td className="py-5 text-lg font-semibold tabular-nums">
+              <td className="py-5 text-lg font-semibold tabular-nums text-accent">
                 <bdi>{formatPrice(offer.price)}</bdi>
               </td>
               <td className="py-5 text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
               </td>
               <td className="py-5 text-sm">
                 {offer.in_stock ? (
-                  <span className="text-signal">במלאי</span>
+                  <span className="text-accent">במלאי</span>
                 ) : (
                   <span className="text-muted-foreground">אזל</span>
                 )}
@@ -85,7 +85,7 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
                 <Button
                   asChild
                   size="sm"
-                  variant={offer.id === cheapest.id ? "default" : "outline"}
+                  variant={offer.id === cheapest.id ? "accent" : "outline"}
                   disabled={!offer.in_stock}
                 >
                   <a
@@ -108,26 +108,26 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
         {offers.map((offer) => (
           <li
             key={offer.id}
-            className="rounded-card border border-border p-4"
+            className="rounded-[1.5rem] border border-white/10 bg-surface p-4"
           >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{offer.store?.name ?? "חנות"}</span>
                   {offer.id === cheapest.id && offer.in_stock && (
-                    <Badge variant="signal">הכי זול</Badge>
+                    <PillTag tone="accent">הכי זול</PillTag>
                   )}
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
                   {offer.shipping_note ?? "—"} ·{" "}
                   {offer.in_stock ? (
-                    <span className="text-signal">במלאי</span>
+                    <span className="text-accent">במלאי</span>
                   ) : (
                     "אזל"
                   )}
                 </p>
               </div>
-              <p className="text-lg font-semibold tabular-nums">
+              <p className="text-lg font-semibold tabular-nums text-accent">
                 <bdi>{formatPrice(offer.price)}</bdi>
               </p>
             </div>
@@ -135,7 +135,7 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
             <Button
               asChild
               size="md"
-              variant={offer.id === cheapest.id ? "default" : "outline"}
+              variant={offer.id === cheapest.id ? "accent" : "outline"}
               className="mt-4 w-full"
               disabled={!offer.in_stock}
             >

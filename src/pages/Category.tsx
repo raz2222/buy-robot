@@ -29,13 +29,13 @@ export default function Category() {
 
   return (
     <>
-      <section className="bg-ink pb-14 pt-28 text-ink-foreground md:pb-16 md:pt-32">
+      <section className="pb-14 pt-28 md:pb-16 md:pt-32">
         <div className="container">
           <h1 className="text-balance text-3xl font-semibold sm:text-4xl lg:text-5xl">
             {category?.name ?? "קטגוריה"}
           </h1>
           {category?.tagline && (
-            <p className="mt-4 max-w-xl text-base leading-8 text-ink-muted">
+            <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
               {category.tagline}
             </p>
           )}
@@ -44,7 +44,7 @@ export default function Category() {
 
       <section className="bg-background py-12 md:py-16">
         <div className="container">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
             <p className="text-sm text-muted-foreground">
               <bdi>{robots.length}</bdi> דגמים
             </p>
@@ -57,7 +57,7 @@ export default function Category() {
                 id="sort"
                 value={sort}
                 onChange={(event) => setSort(event.target.value)}
-                className="h-11 rounded-full border border-border bg-background px-4 text-sm outline-none transition-colors focus:border-foreground"
+                className="h-11 rounded-full border border-white/10 bg-background px-4 text-sm outline-none transition-colors focus:border-foreground"
               >
                 {SORTS.map((option) => (
                   <option key={option.value} value={option.value}>

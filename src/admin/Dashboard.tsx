@@ -145,7 +145,7 @@ export default function Dashboard() {
                       <bdi>{row.count}</bdi>
                     </span>
                   </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/5">
                     <div
                       className="h-full rounded-full bg-foreground transition-[width] duration-700 ease-smooth"
                       style={{ width: `${(row.count / maxStoreClicks) * 100}%` }}
@@ -171,7 +171,7 @@ export default function Dashboard() {
                   className="flex items-center justify-between gap-4"
                 >
                   <span className="flex min-w-0 items-center gap-3 text-sm">
-                    <span className="grid size-6 shrink-0 place-items-center rounded-full bg-muted text-xs tabular-nums">
+                    <span className="grid size-6 shrink-0 place-items-center rounded-full bg-white/5 text-xs tabular-nums">
                       <bdi>{index + 1}</bdi>
                     </span>
                     <span className="truncate">{row.robot?.name ?? "—"}</span>
@@ -189,7 +189,7 @@ export default function Dashboard() {
           {leads.length === 0 ? (
             <Empty>עדיין אין לידים.</Empty>
           ) : (
-            <ul className="divide-y divide-border">
+            <ul className="divide-y divide-white/10">
               {leads.slice(0, 6).map((lead) => (
                 <li key={lead.id} className="flex items-center justify-between gap-4 py-3">
                   <div className="min-w-0">
@@ -222,7 +222,7 @@ function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="rounded-card border border-border bg-background p-5">
+    <div className="rounded-[1.5rem] border border-white/10 bg-background p-5">
       <div className="flex items-center gap-2 text-muted-foreground">
         {icon}
         <span className="text-xs">{label}</span>
@@ -245,7 +245,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-card border border-border bg-background p-6">
+    <section className="rounded-[1.5rem] border border-white/10 bg-background p-6">
       <div className="mb-5 flex items-center justify-between gap-4">
         <h2 className="text-sm font-semibold">{title}</h2>
         {action && (

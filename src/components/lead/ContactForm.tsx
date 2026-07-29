@@ -89,9 +89,9 @@ export function ContactForm({
     return (
       <div
         role="status"
-        className={cn("rounded-card border border-signal/30 bg-signal/5 p-8", className)}
+        className={cn("rounded-[1.5rem] border border-accent/30 bg-accent/5 p-8", className)}
       >
-        <span className="grid size-11 place-items-center rounded-full bg-signal text-signal-foreground">
+        <span className="grid size-11 place-items-center rounded-full bg-accent text-accent-foreground">
           <Check className="size-5" />
         </span>
         <h3 className="mt-5 text-lg font-semibold">{successTitle}</h3>
@@ -122,14 +122,14 @@ export function ContactForm({
               value={values[field.name] ?? ""}
               onChange={(event) => set(field.name, event.target.value)}
               placeholder={field.placeholder}
-              className="w-full rounded-card border border-input bg-background p-4 text-sm outline-none transition-colors focus:border-foreground"
+              className="w-full rounded-[1.5rem] border border-white/20 bg-background p-4 text-sm outline-none transition-colors focus:border-foreground"
             />
           ) : field.type === "select" ? (
             <select
               id={`${type}-${field.name}`}
               value={values[field.name] ?? ""}
               onChange={(event) => set(field.name, event.target.value)}
-              className="h-12 w-full rounded-full border border-input bg-background px-5 text-sm outline-none transition-colors focus:border-foreground"
+              className="h-12 w-full rounded-full border border-white/20 bg-background px-5 text-sm outline-none transition-colors focus:border-foreground"
             >
               <option value="">בחר…</option>
               {field.options?.map((option) => (
@@ -155,7 +155,7 @@ export function ContactForm({
               value={values[field.name] ?? ""}
               onChange={(event) => set(field.name, event.target.value)}
               placeholder={field.placeholder}
-              className="h-12 w-full rounded-full border border-input bg-background px-5 text-start text-sm outline-none transition-colors focus:border-foreground"
+              className="h-12 w-full rounded-full border border-white/20 bg-background px-5 text-start text-sm outline-none transition-colors focus:border-foreground"
             />
           )}
         </div>

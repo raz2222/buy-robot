@@ -218,7 +218,7 @@ function FullMenu({
                   >
                     <Link
                       to={`/category/${category.slug}`}
-                      className="group/cat flex items-center gap-3 rounded-card border border-transparent p-3 transition-colors duration-300 hover:border-white/15 hover:bg-surface"
+                      className="group/cat flex items-center gap-3 rounded-[1.5rem] border border-transparent p-3 transition-colors duration-300 hover:border-white/15 hover:bg-surface"
                     >
                       <span className="grid size-10 shrink-0 place-items-center rounded-full border border-white/15 text-muted-foreground transition-colors duration-300 group-hover/cat:border-accent group-hover/cat:text-accent">
                         <CategoryIcon name={category.icon} className="size-4" />

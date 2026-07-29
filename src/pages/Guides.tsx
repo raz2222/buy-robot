@@ -24,12 +24,12 @@ export default function Guides() {
 
   return (
     <>
-      <section className="bg-ink pb-14 pt-28 text-ink-foreground md:pb-16 md:pt-32">
+      <section className="pb-14 pt-28 md:pb-16 md:pt-32">
         <div className="container">
           <h1 className="text-balance text-3xl font-semibold sm:text-4xl lg:text-5xl">
             מדריכים והשוואות
           </h1>
-          <p className="mt-4 max-w-xl text-base leading-8 text-ink-muted">
+          <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
             ריכזנו מפרטים, מחירים ודירוגי משתמשים כדי לענות על השאלה היחידה
             שמעניינת — מה כדאי לקנות, ולמה.
           </p>
@@ -38,7 +38,7 @@ export default function Guides() {
 
       <section className="bg-background py-12 md:py-16">
         <div className="container">
-          <div className="flex flex-wrap gap-2 border-b border-border pb-8">
+          <div className="flex flex-wrap gap-2 border-b border-white/10 pb-8">
             <FilterChip
               active={filter === null}
               onClick={() => setFilter(null)}
@@ -100,7 +100,7 @@ function FilterChip({
         "min-h-11 rounded-full border px-4 text-sm transition-colors duration-200",
         active
           ? "border-foreground bg-foreground text-background"
-          : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
+          : "border-white/10 text-muted-foreground hover:border-foreground hover:text-foreground",
       )}
     >
       {label}

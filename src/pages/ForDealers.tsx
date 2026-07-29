@@ -34,36 +34,36 @@ export default function ForDealers() {
 
   return (
     <>
-      <section className="bg-ink pb-16 pt-28 text-ink-foreground md:pb-20 md:pt-36">
+      <section className="pb-16 pt-28 md:pb-20 md:pt-36">
         <div ref={ref} className="container">
           <div className="max-w-3xl">
-            <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-ink-muted">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
               B2B
             </p>
             <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
               הקונים כבר כאן. נחבר ביניכם.
             </h1>
-            <p className="mt-5 text-base leading-8 text-ink-muted">
+            <p className="mt-5 text-base leading-8 text-muted-foreground">
               אנשים מגיעים לאתר בשלב שבו הם כבר החליטו לקנות ומחפשים איפה.
               אנחנו יודעים איזו קטגוריה מעניינת אותם, מה התקציב, ואיפה הם גרים.
             </p>
           </div>
 
-          <dl className="mt-14 grid gap-8 border-t border-ink-foreground/10 pt-10 sm:grid-cols-3">
+          <dl className="mt-14 grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-3">
             <div>
-              <dt className="text-sm text-ink-muted">ברשימת ההמתנה להומנואידים</dt>
+              <dt className="text-sm text-muted-foreground">ברשימת ההמתנה להומנואידים</dt>
               <dd className="mt-2 text-4xl font-semibold tabular-nums">
                 <bdi>{shown.toLocaleString("he-IL")}</bdi>
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-ink-muted">קטגוריות מכוסות</dt>
+              <dt className="text-sm text-muted-foreground">קטגוריות מכוסות</dt>
               <dd className="mt-2 text-4xl font-semibold tabular-nums">
                 <bdi>7</bdi>
               </dd>
             </div>
             <div>
-              <dt className="text-sm text-ink-muted">חנויות בהשוואה</dt>
+              <dt className="text-sm text-muted-foreground">חנויות בהשוואה</dt>
               <dd className="mt-2 text-4xl font-semibold tabular-nums">
                 <bdi>4</bdi>
               </dd>
@@ -78,7 +78,7 @@ export default function ForDealers() {
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {OFFERINGS.map((item, index) => (
               <Reveal key={item.title} delay={index * 80}>
-                <div className="h-full rounded-card border border-border p-7">
+                <div className="h-full rounded-[1.5rem] border border-white/10 p-7">
                   <h3 className="text-base font-semibold">{item.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-muted-foreground">
                     {item.body}
@@ -88,7 +88,7 @@ export default function ForDealers() {
             ))}
           </div>
 
-          <div className="mt-12 rounded-card bg-surface p-6">
+          <div className="mt-12 rounded-[1.5rem] bg-surface p-6">
             <p className="text-sm leading-7 text-muted-foreground">
               <strong className="font-medium text-foreground">מה שלא נמכר:</strong>{" "}
               דירוגים. הציון שמוצג באתר מחושב לפי מפרט, מחיר ודירוגי משתמשים,

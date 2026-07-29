@@ -45,24 +45,24 @@ export default function Guide() {
   return (
     <>
       <article>
-        <header className="bg-ink pb-14 pt-28 text-ink-foreground md:pb-16 md:pt-32">
+        <header className="pb-14 pt-28 md:pb-16 md:pt-32">
           <div className="container">
             <nav
               aria-label="פירורי לחם"
-              className="mb-8 flex items-center gap-1 text-xs text-ink-muted"
+              className="mb-8 flex items-center gap-1 text-xs text-muted-foreground"
             >
-              <Link to="/guides" className="hover:text-ink-foreground">
+              <Link to="/guides" className="hover:text-foreground">
                 מדריכים
               </Link>
               <ChevronLeft className="size-3" />
-              <span className="text-ink-foreground">{guide.title}</span>
+              <span className="text-foreground">{guide.title}</span>
             </nav>
 
             <div className="max-w-3xl">
               {category && (
                 <Badge
                   variant="outline"
-                  className="border-ink-foreground/25 bg-ink-foreground/10 text-ink-foreground"
+                  className="border-white/25 bg-white/10 text-foreground"
                 >
                   {category.name}
                 </Badge>
@@ -70,7 +70,7 @@ export default function Guide() {
               <h1 className="mt-5 text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
                 {guide.title}
               </h1>
-              <div className="mt-6 flex items-center gap-4 text-sm text-ink-muted">
+              <div className="mt-6 flex items-center gap-4 text-sm text-muted-foreground">
                 <time dateTime={guide.published_at ?? undefined}>
                   {formatDate(guide.published_at)}
                 </time>
@@ -101,7 +101,7 @@ export default function Guide() {
               </p>
             ))}
 
-            <div className="mt-12 rounded-card bg-surface p-6">
+            <div className="mt-12 rounded-[1.5rem] bg-surface p-6">
               <p className="text-sm leading-7 text-muted-foreground">
                 <strong className="font-medium text-foreground">שקיפות:</strong>{" "}
                 אנחנו לא מעבדת בדיקות. הדירוגים שלנו מבוססים על מפרטי היצרן,
@@ -115,7 +115,7 @@ export default function Guide() {
           </div>
 
           <aside className="lg:sticky lg:top-28 lg:self-start">
-            <div className="rounded-card border border-border p-6">
+            <div className="rounded-[1.5rem] border border-white/10 p-6">
               <h2 className="text-base font-semibold">
                 מייל אחד בשבוע, בלי ספאם
               </h2>

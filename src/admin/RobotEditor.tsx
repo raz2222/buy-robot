@@ -101,7 +101,7 @@ export default function RobotEditor() {
       </header>
 
       {/* ---------- add an offer ---------- */}
-      <section className="rounded-card border border-border bg-background p-6">
+      <section className="rounded-[1.5rem] border border-white/10 bg-background p-6">
         <h2 className="text-sm font-semibold">הוספת חנות</h2>
         <p className="mt-1 text-xs leading-6 text-muted-foreground">
           הדביקו קישור רגיל למוצר מאתר החנות. אנחנו נזהה את החנות ונבנה את
@@ -119,15 +119,15 @@ export default function RobotEditor() {
               value={productUrl}
               onChange={(event) => setProductUrl(event.target.value)}
               placeholder="https://ksp.co.il/web/item/123456"
-              className="h-12 w-full rounded-full border border-input bg-background px-5 text-start text-sm outline-none focus:border-foreground"
+              className="h-12 w-full rounded-full border border-white/20 bg-background px-5 text-start text-sm outline-none focus:border-foreground"
             />
 
             {productUrl && (
-              <div className="mt-3 rounded-card bg-muted p-4">
+              <div className="mt-3 rounded-[1.5rem] bg-white/5 p-4">
                 {matchedStore ? (
                   <>
                     <p className="flex items-center gap-2 text-xs font-medium">
-                      <Check className="size-3.5 text-signal" />
+                      <Check className="size-3.5 text-accent" />
                       זוהתה החנות: {matchedStore.name} · עמלה{" "}
                       <bdi>{matchedStore.commission_rate}%</bdi>
                     </p>
@@ -156,7 +156,7 @@ export default function RobotEditor() {
                 dir="ltr"
                 value={price}
                 onChange={(event) => setPrice(event.target.value)}
-                className="h-12 w-full rounded-full border border-input bg-background px-5 text-start text-sm outline-none focus:border-foreground"
+                className="h-12 w-full rounded-full border border-white/20 bg-background px-5 text-start text-sm outline-none focus:border-foreground"
               />
             </div>
             <div>
@@ -168,7 +168,7 @@ export default function RobotEditor() {
                 value={shipping}
                 onChange={(event) => setShipping(event.target.value)}
                 placeholder="משלוח חינם"
-                className="h-12 w-full rounded-full border border-input bg-background px-5 text-sm outline-none focus:border-foreground"
+                className="h-12 w-full rounded-full border border-white/20 bg-background px-5 text-sm outline-none focus:border-foreground"
               />
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function RobotEditor() {
             </p>
           )}
           {saved && (
-            <p role="status" className="text-sm text-signal">
+            <p role="status" className="text-sm text-accent">
               ההצעה נשמרה.
             </p>
           )}
@@ -204,7 +204,7 @@ export default function RobotEditor() {
       </section>
 
       {/* ---------- existing offers ---------- */}
-      <section className="mt-6 rounded-card border border-border bg-background p-6">
+      <section className="mt-6 rounded-[1.5rem] border border-white/10 bg-background p-6">
         <h2 className="text-sm font-semibold">
           חנויות שמוכרות את הדגם (<bdi>{offers.length}</bdi>)
         </h2>
@@ -214,7 +214,7 @@ export default function RobotEditor() {
             עדיין לא הוספת חנויות לדגם הזה.
           </p>
         ) : (
-          <ul className="mt-4 divide-y divide-border">
+          <ul className="mt-4 divide-y divide-white/10">
             {(offers as OfferAdmin[]).map((offer) => {
               const store = stores.find((item) => item.id === offer.store_id);
               return (
@@ -241,7 +241,7 @@ export default function RobotEditor() {
                     type="button"
                     onClick={() => remove.mutate(offer.id)}
                     aria-label={`מחיקת ההצעה של ${store?.name ?? "החנות"}`}
-                    className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="grid size-11 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
                   >
                     <Trash2 className="size-4" />
                   </button>

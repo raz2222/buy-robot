@@ -34,7 +34,7 @@ export default function NotFound() {
             <Link
               key={category.id}
               to={`/category/${category.slug}`}
-              className="rounded-full border border-border px-4 py-2 text-sm transition-colors duration-200 hover:border-foreground"
+              className="rounded-full border border-white/10 px-4 py-2 text-sm transition-colors duration-200 hover:border-foreground"
             >
               {category.name}
             </Link>

@@ -64,7 +64,7 @@ export default function AdminLayout() {
 
   return (
     <div className="flex min-h-screen bg-surface">
-      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-s border-border bg-background p-5 lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-s border-white/10 bg-background p-5 lg:flex">
         <Logo />
 
         <nav className="mt-8 flex-1 space-y-1">
@@ -75,10 +75,10 @@ export default function AdminLayout() {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  "flex min-h-11 items-center gap-3 rounded-card px-3 text-sm transition-colors duration-200",
+                  "flex min-h-11 items-center gap-3 rounded-[1.5rem] px-3 text-sm transition-colors duration-200",
                   isActive
                     ? "bg-foreground text-background"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
                 )
               }
             >
@@ -88,14 +88,14 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="border-t border-border pt-4">
+        <div className="border-t border-white/10 pt-4">
           <p className="truncate text-xs text-muted-foreground" dir="ltr">
             {session?.user.email}
           </p>
           <button
             type="button"
             onClick={() => supabase.auth.signOut()}
-            className="mt-3 flex min-h-11 w-full items-center gap-2 rounded-card px-3 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            className="mt-3 flex min-h-11 w-full items-center gap-2 rounded-[1.5rem] px-3 text-sm text-muted-foreground transition-colors hover:bg-white/5 hover:text-foreground"
           >
             <LogOut className="size-4" />
             התנתקות
@@ -105,7 +105,7 @@ export default function AdminLayout() {
 
       {/* Mobile nav: the sidebar collapses to a scrollable strip. */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="sticky top-0 z-30 flex gap-1 overflow-x-auto border-b border-border bg-background px-4 py-3 lg:hidden">
+        <div className="sticky top-0 z-30 flex gap-1 overflow-x-auto border-b border-white/10 bg-background px-4 py-3 lg:hidden">
           {NAV.map((item) => (
             <NavLink
               key={item.to}

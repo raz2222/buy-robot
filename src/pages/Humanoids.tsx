@@ -52,17 +52,17 @@ export default function Humanoids() {
 
   return (
     <>
-      <section className="bg-ink pb-16 pt-28 text-ink-foreground md:pb-20 md:pt-36">
+      <section className="pb-16 pt-28 md:pb-20 md:pt-36">
         <div ref={ref} className="container">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-ink-muted">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
                 מעקב שוק
               </p>
               <h1 className="text-balance text-3xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
                 מתי רובוט הומנואידי יגיע לישראל?
               </h1>
-              <p className="mt-5 max-w-lg text-base leading-8 text-ink-muted">
+              <p className="mt-5 max-w-lg text-base leading-8 text-muted-foreground">
                 התשובה הכנה: אף אחד לא יודע בוודאות. מה שכן אפשר לעשות זה לעקוב
                 אחרי מה שקורה בפועל — מי כבר מוכר, למי יש יבואן, ומה המחיר
                 האמיתי אחרי מכס ומע״מ. אנחנו עושים את זה, ומעדכנים כשיש חדש.
@@ -79,11 +79,11 @@ export default function Humanoids() {
               </div>
             </div>
 
-            <div className="rounded-hero border border-ink-foreground/10 bg-ink-foreground/[0.04] p-10 text-center lg:justify-self-end">
+            <div className="rounded-hero border border-white/10 bg-white/[0.04] p-10 text-center lg:justify-self-end">
               <p className="text-6xl font-semibold tabular-nums sm:text-7xl">
                 <bdi>{shown.toLocaleString("he-IL")}</bdi>
               </p>
-              <p className="mt-3 text-sm text-ink-muted">
+              <p className="mt-3 text-sm text-muted-foreground">
                 ישראלים ברשימת ההמתנה
               </p>
             </div>
@@ -99,7 +99,7 @@ export default function Humanoids() {
             ארבעת השחקנים שכדאי להכיר, ומה הסטטוס האמיתי של כל אחד מהם.
           </p>
 
-          <div className="mt-10 divide-y divide-border border-y border-border">
+          <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
             {TRACKER.map((item, index) => (
               <Reveal key={item.name} delay={index * 60}>
                 <div className="grid gap-4 py-7 md:grid-cols-[1fr_auto] md:items-start md:gap-10">

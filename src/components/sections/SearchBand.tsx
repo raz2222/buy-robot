@@ -29,7 +29,7 @@ export function SearchBand() {
   };
 
   return (
-    <section className="border-b border-border bg-background py-16 md:py-24">
+    <section className="border-b border-white/10 bg-background py-16 md:py-24">
       <div className="container">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-semibold sm:text-4xl">
@@ -43,7 +43,7 @@ export function SearchBand() {
         <Reveal delay={120} className="mx-auto mt-8 max-w-3xl">
           <form
             onSubmit={onSubmit}
-            className="flex flex-col gap-3 rounded-card border border-border bg-background p-3 shadow-card md:flex-row md:items-center md:rounded-full md:p-2"
+            className="flex flex-col gap-3 rounded-[1.5rem] border border-white/10 bg-background p-3 shadow-card md:flex-row md:items-center md:rounded-full md:p-2"
           >
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute inset-y-0 start-4 my-auto size-4 text-muted-foreground" />

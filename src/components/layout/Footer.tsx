@@ -21,12 +21,12 @@ export function Footer() {
   const { data: categories = [] } = useCategories();
 
   return (
-    <footer className="bg-ink text-ink-foreground">
+    <footer className="">
       <div className="container py-16 md:py-20">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <Logo />
-            <p className="mt-5 max-w-xs text-sm leading-7 text-ink-muted">
+            <p className="mt-5 max-w-xs text-sm leading-7 text-muted-foreground">
               מרכזים את כל הרובוטים הביתיים שנמכרים בישראל, משווים מחירים בין
               החנויות, ועוזרים לבחור נכון.
             </p>
@@ -36,7 +36,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="אינסטגרם"
-                className="grid size-11 place-items-center rounded-full border border-ink-foreground/15 transition-colors duration-200 hover:border-ink-foreground/50"
+                className="grid size-11 place-items-center rounded-full border border-white/15 transition-colors duration-200 hover:border-white/50"
               >
                 <Instagram className="size-4" />
               </a>
@@ -45,7 +45,7 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="יוטיוב"
-                className="grid size-11 place-items-center rounded-full border border-ink-foreground/15 transition-colors duration-200 hover:border-ink-foreground/50"
+                className="grid size-11 place-items-center rounded-full border border-white/15 transition-colors duration-200 hover:border-white/50"
               >
                 <Youtube className="size-4" />
               </a>
@@ -80,9 +80,9 @@ export function Footer() {
           and by the affiliate programmes themselves, and it costs nothing in
           trust when it is stated plainly rather than buried.
         */}
-        <div className="mt-14 rounded-card border border-ink-foreground/10 bg-ink-foreground/[0.03] p-5">
-          <p className="text-xs leading-6 text-ink-muted">
-            <strong className="font-medium text-ink-foreground">גילוי נאות:</strong>{" "}
+        <div className="mt-14 rounded-[1.5rem] border border-white/10 bg-white/[0.03] p-5">
+          <p className="text-xs leading-6 text-muted-foreground">
+            <strong className="font-medium text-foreground">גילוי נאות:</strong>{" "}
             חלק מהקישורים באתר הם קישורי שותפים. אם תרכשו דרכם, אנחנו עשויים
             לקבל עמלה מהחנות — בלי תוספת עלות עבורכם. העמלה אינה משפיעה על
             הציון שאנחנו נותנים למוצר ולא על סדר ההצגה. המחירים מתעדכנים
@@ -90,7 +90,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-ink-foreground/10 pt-8 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} buy robots. כל הזכויות שמורות.</p>
           <p dir="ltr">buyrobots.co.il</p>
         </div>
@@ -108,7 +108,7 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-medium text-ink-foreground">{title}</h3>
+      <h3 className="text-sm font-medium text-foreground">{title}</h3>
       <ul className="mt-5 space-y-3">{children}</ul>
     </div>
   );
@@ -119,7 +119,7 @@ function FooterLink({ to, label }: { to: string; label: string }) {
     <li>
       <Link
         to={to}
-        className="text-sm text-ink-muted transition-colors duration-200 hover:text-ink-foreground"
+        className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
       >
         {label}
       </Link>

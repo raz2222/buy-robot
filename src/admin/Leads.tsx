@@ -103,7 +103,7 @@ export default function Leads() {
           value={type}
           onChange={(event) => setType(event.target.value as LeadType | "all")}
           aria-label="סינון לפי סוג"
-          className="h-11 rounded-full border border-border bg-background px-4 text-sm outline-none focus:border-foreground"
+          className="h-11 rounded-full border border-white/10 bg-background px-4 text-sm outline-none focus:border-foreground"
         >
           <option value="all">כל הסוגים</option>
           {TYPES.map((value) => (
@@ -117,7 +117,7 @@ export default function Leads() {
           value={status}
           onChange={(event) => setStatus(event.target.value as LeadStatus | "all")}
           aria-label="סינון לפי סטטוס"
-          className="h-11 rounded-full border border-border bg-background px-4 text-sm outline-none focus:border-foreground"
+          className="h-11 rounded-full border border-white/10 bg-background px-4 text-sm outline-none focus:border-foreground"
         >
           <option value="all">כל הסטטוסים</option>
           {STATUSES.map((value) => (
@@ -131,7 +131,7 @@ export default function Leads() {
       {isLoading ? (
         <p className="text-sm text-muted-foreground">טוען…</p>
       ) : visible.length === 0 ? (
-        <div className="rounded-card border border-dashed border-border p-12 text-center">
+        <div className="rounded-[1.5rem] border border-dashed border-white/10 p-12 text-center">
           <p className="text-sm text-muted-foreground">אין לידים שתואמים לסינון.</p>
         </div>
       ) : (
@@ -169,7 +169,7 @@ function LeadRow({
   const details = Object.entries(lead.payload ?? {});
 
   return (
-    <li className="rounded-card border border-border bg-background">
+    <li className="rounded-[1.5rem] border border-white/10 bg-background">
       <button
         type="button"
         onClick={onToggle}
@@ -179,7 +179,7 @@ function LeadRow({
         <span
           className={cn(
             "size-2 shrink-0 rounded-full",
-            lead.status === "new" ? "bg-signal" : "bg-border",
+            lead.status === "new" ? "bg-accent" : "bg-border",
           )}
           aria-hidden="true"
         />
@@ -191,13 +191,13 @@ function LeadRow({
             {LEAD_TYPE_LABELS[lead.type]} · {timeAgo(lead.created_at)}
           </span>
         </span>
-        <span className="shrink-0 rounded-full bg-muted px-3 py-1 text-xs">
+        <span className="shrink-0 rounded-full bg-white/5 px-3 py-1 text-xs">
           {LEAD_STATUS_LABELS[lead.status]}
         </span>
       </button>
 
       {open && (
-        <div className="border-t border-border p-4">
+        <div className="border-t border-white/10 p-4">
           <dl className="grid gap-x-8 gap-y-3 sm:grid-cols-2">
             {lead.name && <Detail label="שם" value={lead.name} />}
             {lead.phone && <Detail label="טלפון" value={lead.phone} ltr />}
@@ -220,7 +220,7 @@ function LeadRow({
                   "min-h-11 rounded-full border px-4 text-sm transition-colors",
                   lead.status === value
                     ? "border-foreground bg-foreground text-background"
-                    : "border-border text-muted-foreground hover:border-foreground hover:text-foreground",
+                    : "border-white/10 text-muted-foreground hover:border-foreground hover:text-foreground",
                 )}
               >
                 {LEAD_STATUS_LABELS[value]}
@@ -241,7 +241,7 @@ function LeadRow({
             onChange={(event) => setNotes(event.target.value)}
             onBlur={() => notes !== (lead.notes ?? "") && onNotes(notes)}
             placeholder="מה סוכם, למי נמכר, מתי לחזור…"
-            className="mt-2 w-full rounded-card border border-input bg-background p-3 text-sm outline-none focus:border-foreground"
+            className="mt-2 w-full rounded-[1.5rem] border border-white/20 bg-background p-3 text-sm outline-none focus:border-foreground"
           />
         </div>
       )}
