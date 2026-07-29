@@ -21,10 +21,13 @@ export function PocketCard({
   robot,
   /** Index into the comparison series palette; omit outside a comparison. */
   seriesIndex,
+  /** Tightens every dimension so three cards fit across a phone. */
+  compact = false,
   className,
 }: {
   robot: RobotWithOffers;
   seriesIndex?: number;
+  compact?: boolean;
   className?: string;
 }) {
   const offer = robot.offers?.[0];
@@ -37,7 +40,7 @@ export function PocketCard({
         to={`/robot/${robot.slug}`}
         className="block overflow-hidden rounded-[1.75rem] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        <div className="relative aspect-[3/4] bg-light">
+        <div className={cn("relative bg-light", compact ? "aspect-[3/4.6]" : "aspect-[3/4]")}>
           {/* the artwork — rides up on hover */}
           <ProductImage
             src={robot.hero_image}
@@ -47,7 +50,10 @@ export function PocketCard({
 
           {/* the serial, as in the reference */}
           <span
-            className="absolute end-4 top-4 text-[0.7rem] font-medium tracking-wider text-white mix-blend-difference"
+            className={cn(
+              "absolute end-3 top-3 font-medium tracking-wider text-white mix-blend-difference",
+              compact ? "text-[0.6rem]" : "text-[0.7rem]",
+            )}
             dir="ltr"
           >
             {robot.brand?.toUpperCase().replace(/\s/g, "").slice(0, 8)}
@@ -75,25 +81,30 @@ export function PocketCard({
               }}
             />
 
-            <div className="absolute inset-x-0 bottom-0 top-4 flex flex-col justify-between rounded-[1.6rem] rounded-ss-none bg-accent p-5 text-background">
+            <div
+              className={cn(
+                "absolute inset-x-0 bottom-0 top-4 flex flex-col justify-between rounded-[1.6rem] rounded-ss-none bg-accent text-background",
+                compact ? "p-3.5" : "p-5",
+              )}
+            >
               <div>
-                <p className="text-[0.7rem] text-background/70">
+                <p className={cn("text-background/70", compact ? "text-[0.6rem]" : "text-[0.7rem]")}>
                   {robot.category?.name ?? "רובוט ביתי"}
                 </p>
-                <h3 className="mt-1 text-lg font-semibold leading-6 line-clamp-2">
+                <h3 className={cn("mt-1 font-semibold line-clamp-2", compact ? "text-[0.8rem] leading-4" : "text-lg leading-6")}>
                   {robot.name}
                 </h3>
               </div>
 
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-3xl font-semibold tabular-nums">
+                  <p className={cn("font-semibold tabular-nums", compact ? "text-xl" : "text-3xl")}>
                     <bdi>{robot.score?.toFixed(1) ?? "—"}</bdi>
-                    <span className="ms-1.5 align-middle text-xs font-normal text-background/70">
+                    <span className="ms-1 align-middle text-[0.6rem] font-normal text-background/70">
                       ציון
                     </span>
                   </p>
-                  <p className="mt-1 truncate text-xs text-background/70">
+                  <p className={cn("mt-1 truncate text-background/70", compact ? "text-[0.6rem]" : "text-xs")}>
                     {offer?.store ? `הכי זול ב-${offer.store.name}` : "מחיר משוער"}{" "}
                     · <bdi>{formatPrice(offer?.price ?? robot.price_from)}</bdi>
                   </p>
@@ -101,7 +112,11 @@ export function PocketCard({
 
                 <span
                   aria-hidden="true"
-                  className="grid size-10 shrink-0 place-items-center rounded-full border border-background/40 transition-colors duration-500 ease-smooth group-hover/pocket:border-transparent group-hover/pocket:bg-background group-hover/pocket:text-accent"
+                  className={cn(
+                    "hidden shrink-0 place-items-center rounded-full border border-background/40 transition-colors duration-500 ease-smooth sm:grid",
+                    "group-hover/pocket:border-transparent group-hover/pocket:bg-background group-hover/pocket:text-accent",
+                    compact ? "size-8" : "size-10",
+                  )}
                 >
                   <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
                     <path
