@@ -32,8 +32,11 @@ export default {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
-        vsa: "hsl(var(--vs-a))",
-        vsb: "hsl(var(--vs-b))",
+        series: {
+          1: "hsl(var(--series-1))",
+          2: "hsl(var(--series-2))",
+          3: "hsl(var(--series-3))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

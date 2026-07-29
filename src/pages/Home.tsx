@@ -2,6 +2,7 @@ import { Hero } from "@/components/sections/Hero";
 import { SearchBand } from "@/components/sections/SearchBand";
 import { TopPicks } from "@/components/sections/TopPicks";
 import { CategoryStrip } from "@/components/sections/CategoryStrip";
+import { CompareLab } from "@/components/sections/CompareLab";
 import { GuidesPreview } from "@/components/sections/GuidesPreview";
 import { HumanoidWaitlist } from "@/components/sections/HumanoidWaitlist";
 import { NewsletterCta } from "@/components/sections/NewsletterCta";
@@ -23,6 +24,7 @@ export default function Home() {
       <Hero robots={featured} />
       <SearchBand />
       <TopPicks />
+      <CompareLab />
       <CategoryStrip />
       <GuidesPreview />
       <HumanoidWaitlist />
