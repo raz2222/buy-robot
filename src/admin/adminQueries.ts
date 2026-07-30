@@ -65,6 +65,21 @@ export function useAdminRobots() {
   });
 }
 
+export function useUpdateRobot() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...patch }: Partial<Robot> & { id: string }) => {
+      const { error } = await supabase.from("robots").update(patch).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["admin", "robots"] });
+      client.invalidateQueries({ queryKey: ["robots"] });
+      client.invalidateQueries({ queryKey: ["robot"] });
+    },
+  });
+}
+
 export function useAdminGuides() {
   return useQuery({
     queryKey: ["admin", "guides"],
