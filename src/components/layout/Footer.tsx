@@ -93,7 +93,12 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-3 border-t border-white/10 pt-8 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} buy robots. כל הזכויות שמורות.</p>
-          <p dir="ltr">buyrobots.co.il</p>
+          <div className="flex items-center gap-4">
+            <p dir="ltr">buyrobots.co.il</p>
+            <Link to="/admin/login" className="hover:text-foreground">
+              כניסת מנהל
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
