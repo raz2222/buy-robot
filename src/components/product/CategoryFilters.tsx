@@ -88,7 +88,7 @@ function FilterFields({
           id="filter-brand"
           value={value.brand ?? ""}
           onChange={(event) => onChange({ ...value, brand: event.target.value || null })}
-          className="h-11 rounded-full border border-white/10 bg-background px-4 text-sm outline-none transition-colors focus:border-foreground"
+          className="h-11 w-full rounded-full border border-white/10 bg-background px-4 text-sm outline-none transition-colors focus:border-foreground sm:w-auto"
         >
           <option value="">כל המותגים</option>
           {brands.map((brand) => (
@@ -109,7 +109,7 @@ function FilterFields({
           onChange={(event) =>
             onChange({ ...value, priceMax: event.target.value ? Number(event.target.value) : null })
           }
-          className="h-11 rounded-full border border-white/10 bg-background px-4 text-sm outline-none transition-colors focus:border-foreground"
+          className="h-11 w-full rounded-full border border-white/10 bg-background px-4 text-sm outline-none transition-colors focus:border-foreground sm:w-auto"
         >
           <option value="">כל המחירים</option>
           {PRICE_BRACKETS.map((bracket) => (
@@ -120,7 +120,7 @@ function FilterFields({
         </select>
       </div>
 
-      <label className="flex h-11 items-center gap-2 rounded-full border border-white/10 px-4 text-sm">
+      <label className="flex h-11 w-full items-center gap-2 rounded-full border border-white/10 px-4 text-sm sm:w-auto">
         <input
           type="checkbox"
           checked={value.inStockOnly}

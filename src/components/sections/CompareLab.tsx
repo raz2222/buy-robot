@@ -47,8 +47,11 @@ export function CompareLab() {
           blurb="בחר עד שלושה דגמים ותראה בדיוק במה הם נבדלים — ציון, מחיר, כמה החיפוש חוסך לך ובכמה חנויות הם נמכרים."
         />
 
-        {/* ---------- category switch ---------- */}
-        <div className="mt-10 flex flex-wrap gap-2">
+        {/* ---------- category switch ----------
+            A horizontally-scrolling strip on mobile, not a wall of wrapped
+            pills — with this many categories, wrapping reads as broken
+            tabs rather than a chooser. */}
+        <div className="scrollbar-none -mx-5 mt-10 flex snap-x gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -56,7 +59,7 @@ export function CompareLab() {
               onClick={() => switchCategory(category.slug)}
               aria-pressed={categorySlug === category.slug}
               className={cn(
-                "min-h-11 rounded-full border px-4 text-sm transition-colors duration-300",
+                "min-h-11 shrink-0 snap-start rounded-full border px-4 text-sm transition-colors duration-300",
                 categorySlug === category.slug
                   ? "border-transparent bg-foreground text-background"
                   : "border-white/15 text-muted-foreground hover:border-white/40 hover:text-foreground",
@@ -68,7 +71,7 @@ export function CompareLab() {
         </div>
 
         {/* ---------- picker ---------- */}
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="scrollbar-none -mx-5 mt-6 flex snap-x gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {robots.map((robot) => {
             const active = selection.some((item) => item.id === robot.id);
             const seriesIndex = selection.findIndex((item) => item.id === robot.id);
@@ -79,7 +82,7 @@ export function CompareLab() {
                 onClick={() => toggle(robot.id)}
                 aria-pressed={active}
                 className={cn(
-                  "flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm transition-colors duration-300",
+                  "flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm transition-colors duration-300",
                   active
                     ? "border-white/40 bg-surface text-foreground"
                     : "border-white/10 text-muted-foreground hover:border-white/30 hover:text-foreground",

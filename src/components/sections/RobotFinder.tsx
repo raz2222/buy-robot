@@ -261,7 +261,7 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
             </h2>
             <p className="mt-4 text-base text-muted-foreground">{current.blurb}</p>
 
-            <div className="mt-10 grid gap-3 sm:grid-cols-2" role="group" aria-label={current.question}>
+            <div className="mt-10 grid grid-cols-2 gap-2 sm:gap-3" role="group" aria-label={current.question}>
               {current.choices.map((choice, index) => {
                 const selected = answers[current.key] === choice.value;
                 const Icon = choice.icon;
@@ -273,8 +273,9 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
                     aria-pressed={selected}
                     style={{ transitionDelay: `${index * 45}ms` }}
                     className={cn(
-                      "group/choice relative flex min-h-[4.5rem] items-center gap-4 overflow-hidden rounded-[1.5rem] border p-4 text-start",
+                      "group/choice relative flex min-h-[4.5rem] flex-col items-center gap-2 overflow-hidden rounded-[1.5rem] border p-3 text-center",
                       "transition-all duration-500 ease-smooth",
+                      "sm:flex-row sm:gap-4 sm:p-4 sm:text-start",
                       entered ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
                       selected
                         ? "border-accent bg-accent text-accent-foreground"
@@ -292,23 +293,23 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
 
                     <span
                       className={cn(
-                        "relative grid size-12 shrink-0 place-items-center rounded-full border transition-colors duration-500",
+                        "relative grid size-9 shrink-0 place-items-center rounded-full border transition-colors duration-500 sm:size-12",
                         selected
                           ? "border-accent-foreground/25 bg-accent-foreground/10"
                           : "border-white/15 text-muted-foreground group-hover/choice:border-accent group-hover/choice:text-accent",
                       )}
                     >
-                      <Icon className="size-5" />
+                      <Icon className="size-4 sm:size-5" />
                     </span>
 
                     <span className="relative min-w-0 flex-1">
-                      <span className="block text-sm font-medium">
+                      <span className="block text-xs font-medium leading-5 sm:text-sm">
                         {choice.label}
                       </span>
                       {choice.hint && (
                         <span
                           className={cn(
-                            "mt-0.5 block text-xs",
+                            "sr-only sm:not-sr-only sm:mt-0.5 sm:block sm:text-xs",
                             selected
                               ? "text-accent-foreground/70"
                               : "text-muted-foreground",
@@ -319,11 +320,11 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
                       )}
                     </span>
 
-                    <span className="relative shrink-0">
+                    <span className="absolute end-2 top-2 shrink-0 sm:static">
                       {selected ? (
-                        <Check className="size-5" />
+                        <Check className="size-4 sm:size-5" />
                       ) : (
-                        <ArrowRight className="size-4 -scale-x-100 text-muted-foreground transition-transform duration-500 ease-smooth group-hover/choice:-translate-x-1" />
+                        <ArrowRight className="hidden size-4 -scale-x-100 text-muted-foreground transition-transform duration-500 ease-smooth group-hover/choice:-translate-x-1 sm:block" />
                       )}
                     </span>
                   </button>
@@ -442,7 +443,7 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
                 <label htmlFor="quiz-email" className="sr-only">
                   כתובת אימייל
                 </label>
-                <div className="flex h-[3.75rem] items-center gap-2 rounded-full border border-white/25 ps-6 pe-2 transition-colors duration-300 focus-within:border-accent">
+                <div className="flex flex-col gap-2 rounded-[1.75rem] border border-white/25 p-2 transition-colors duration-300 focus-within:border-accent sm:h-[3.75rem] sm:flex-row sm:items-center sm:rounded-full sm:p-0 sm:ps-6 sm:pe-2">
                   <input
                     id="quiz-email"
                     type="email"
@@ -454,12 +455,12 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
                     placeholder="your@email.com"
                     aria-invalid={Boolean(error)}
                     aria-describedby={error ? "quiz-email-error" : undefined}
-                    className="min-w-0 flex-1 bg-transparent text-start text-base outline-none placeholder:text-muted-foreground"
+                    className="h-12 w-full min-w-0 flex-1 rounded-full bg-transparent px-4 text-start text-base outline-none placeholder:text-muted-foreground sm:h-auto sm:rounded-none sm:px-0"
                   />
                   <Button
                     type="submit"
                     variant="accent"
-                    className="h-11 shrink-0"
+                    className="h-11 w-full shrink-0 sm:w-auto"
                     disabled={submit.isPending}
                   >
                     {submit.isPending && <Loader2 className="size-4 animate-spin" />}
