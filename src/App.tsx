@@ -10,6 +10,7 @@ import Guides from "@/pages/Guides";
 import Guide from "@/pages/Guide";
 import Search from "@/pages/Search";
 import Comparisons from "@/pages/Comparisons";
+import Compare from "@/pages/Compare";
 import FindMyRobot from "@/pages/FindMyRobot";
 import Humanoids from "@/pages/Humanoids";
 import Repair from "@/pages/Repair";
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="/guide/:slug" element={<Guide />} />
             <Route path="/search" element={<Search />} />
             <Route path="/comparisons" element={<Comparisons />} />
+            <Route path="/compare/:slugA/:slugB" element={<Compare />} />
             <Route path="/find-my-robot" element={<FindMyRobot />} />
             <Route path="/humanoids" element={<Humanoids />} />
             <Route path="/repair" element={<Repair />} />

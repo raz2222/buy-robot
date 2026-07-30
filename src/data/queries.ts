@@ -114,6 +114,17 @@ export function useGuides(limit?: number, categorySlug?: string) {
         .from("guides")
         .select("*")
         .order("published_at", { ascending: false });
+
+      if (categorySlug) {
+        const { data: category } = await supabase
+          .from("categories")
+          .select("id")
+          .eq("slug", categorySlug)
+          .maybeSingle();
+        if (!category) return [];
+        query = query.eq("category_id", category.id);
+      }
+
       if (limit) query = query.limit(limit);
       const { data, error } = await query;
       if (error) throw error;

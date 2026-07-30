@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubmitLead } from "@/data/queries";
+import { track } from "@/lib/analytics";
 import type { LeadType } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +55,7 @@ export function LeadForm({
     try {
       await submit.mutateAsync({ type, email: email.trim(), payload });
       setDone(true);
+      track("newsletter_signup", { type });
     } catch {
       setError("משהו השתבש. אפשר לנסות שוב?");
     }

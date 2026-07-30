@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { LabelRule } from "@/components/ui/deco";
 import { ProductImage } from "@/components/ui/product-image";
 import { useRobots, useSubmitLead } from "@/data/queries";
+import { track } from "@/lib/analytics";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -137,6 +138,12 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
 
   const onContactStep = step === STEPS.length;
 
+  useEffect(() => {
+    track("quiz_start", { embedded });
+    // Only ever fires once per mount — this is the funnel's entry event.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Replays the panel entrance on every step change. A transition rather
   // than an animation, so the panel is never stuck invisible if animations
   // do not run.
@@ -157,13 +164,28 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
     return [...pool].sort((a, b) => (b.score ?? 0) - (a.score ?? 0)).slice(0, 3);
   }, [robots, answers.budget]);
 
+  // Fires exactly once when the visitor reaches the results screen, never
+  // on every render of it.
+  const completeTracked = useRef(false);
+  useEffect(() => {
+    if (onContactStep && !completeTracked.current) {
+      completeTracked.current = true;
+      track("quiz_complete", { matches: matches.length });
+    }
+    if (!onContactStep) completeTracked.current = false;
+  }, [onContactStep, matches.length]);
+
   const choose = (key: string, value: string) => {
     setAnswers((current) => ({ ...current, [key]: value }));
+    // Which question was answered, never the answer itself — funnel
+    // progress without recording what the visitor actually chose.
+    track("quiz_answer", { step: key });
     // A short beat so the selected state is visible before the screen moves.
     window.setTimeout(() => setStep((current) => current + 1), 260);
   };
 
   const restart = () => {
+    track("quiz_restart");
     setStep(0);
     setAnswers({});
     setEmail("");
@@ -187,6 +209,7 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
         payload: { ...answers, recommended: matches.map((robot) => robot.slug) },
       });
       setSent(true);
+      track("quiz_lead_submit", { matches: matches.length });
     } catch {
       setError("משהו השתבש. אפשר לנסות שוב?");
     }
@@ -393,10 +416,20 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
 
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Button asChild size="sm" variant="outline" className="flex-1">
-                        <Link to={`/robot/${robot.slug}`}>לפרטים המלאים</Link>
+                        <Link
+                          to={`/robot/${robot.slug}`}
+                          onClick={() => track("product_click", { slug: robot.slug, from: "quiz" })}
+                        >
+                          לפרטים המלאים
+                        </Link>
                       </Button>
                       <Button asChild size="sm" variant="accent" className="flex-1">
-                        <Link to={`/robot/${robot.slug}`}>בדיקת מחיר</Link>
+                        <Link
+                          to={`/robot/${robot.slug}`}
+                          onClick={() => track("price_check_click", { slug: robot.slug, from: "quiz" })}
+                        >
+                          בדיקת מחיר
+                        </Link>
                       </Button>
                     </div>
                   </li>

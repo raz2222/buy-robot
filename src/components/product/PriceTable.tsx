@@ -2,6 +2,7 @@ import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PillTag } from "@/components/ui/deco";
 import { offerLink } from "@/lib/affiliate";
+import { track } from "@/lib/analytics";
 import { formatPrice } from "@/lib/format";
 import { sortedOffers } from "@/lib/offers";
 import type { RobotWithOffers } from "@/types";
@@ -92,6 +93,13 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
                     href={offerLink(offer.id)}
                     target="_blank"
                     rel="sponsored nofollow noopener"
+                    onClick={() =>
+                      track("price_check_click", {
+                        slug: robot.slug,
+                        store: offer.store?.name,
+                        from: "price_table",
+                      })
+                    }
                   >
                     לרכישה
                     <ExternalLink className="size-3.5" />
@@ -143,6 +151,13 @@ export function PriceTable({ robot }: { robot: RobotWithOffers }) {
                 href={offerLink(offer.id)}
                 target="_blank"
                 rel="sponsored nofollow noopener"
+                onClick={() =>
+                  track("price_check_click", {
+                    slug: robot.slug,
+                    store: offer.store?.name,
+                    from: "price_table_mobile",
+                  })
+                }
               >
                 לרכישה ב{offer.store?.name}
                 <ExternalLink className="size-3.5" />
