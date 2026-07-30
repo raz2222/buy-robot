@@ -10,7 +10,9 @@ import {
   type CategoryFilterState,
 } from "@/components/product/CategoryFilters";
 import { NewsletterCta } from "@/components/sections/NewsletterCta";
+import { FaqAccordion } from "@/components/ui/faq-accordion";
 import { useCategories, useGuides, useRobots } from "@/data/queries";
+import { CATEGORY_FAQS } from "@/data/faq";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
 import { useJsonLd } from "@/hooks/useJsonLd";
 import { track } from "@/lib/analytics";
@@ -102,8 +104,24 @@ export default function Category() {
     };
   }, [category, robots]);
 
+  const faqs = slug ? CATEGORY_FAQS[slug] : undefined;
+
+  const faqSchema = useMemo(() => {
+    if (!faqs || faqs.length === 0) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
+    };
+  }, [faqs]);
+
   useJsonLd("breadcrumb", breadcrumbSchema);
   useJsonLd("itemlist", itemListSchema);
+  useJsonLd("faq", faqSchema);
 
   return (
     <>
@@ -215,6 +233,16 @@ export default function Category() {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- FAQ ---------- */}
+      {faqs && faqs.length > 0 && (
+        <section className="border-t border-white/10 bg-background py-14 md:py-20">
+          <div className="container max-w-2xl">
+            <h2 className="text-2xl font-semibold sm:text-3xl">שאלות נפוצות</h2>
+            <FaqAccordion items={faqs} className="mt-8" />
           </div>
         </section>
       )}
