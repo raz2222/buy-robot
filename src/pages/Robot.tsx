@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Check, ChevronLeft, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +10,12 @@ import { RobotCard } from "@/components/product/RobotCard";
 import { LeadForm } from "@/components/lead/LeadForm";
 import { useRobot, useRobots } from "@/data/queries";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { bestOffer, maxSaving } from "@/lib/offers";
 import { formatPrice } from "@/lib/format";
 import NotFound from "@/pages/NotFound";
+
+const ORIGIN = "https://buyrobots.co.il";
 
 export default function Robot() {
   const { slug } = useParams();
@@ -23,6 +27,55 @@ export default function Robot() {
     description: robot?.summary ?? undefined,
     path: `/robot/${slug}`,
   });
+
+  // Real offers only — no fabricated rating or review, since there is no
+  // genuine review data model behind this catalogue yet.
+  const productSchema = useMemo(() => {
+    if (!robot) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: robot.name,
+      brand: { "@type": "Brand", name: robot.brand },
+      description: robot.summary ?? undefined,
+      image: robot.hero_image ?? undefined,
+      url: `${ORIGIN}/robot/${robot.slug}`,
+      offers: robot.offers.map((offer) => ({
+        "@type": "Offer",
+        price: offer.price ?? undefined,
+        priceCurrency: "ILS",
+        availability: offer.in_stock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        url: `${ORIGIN}/robot/${robot.slug}`,
+        seller: offer.store ? { "@type": "Organization", name: offer.store.name } : undefined,
+      })),
+    };
+  }, [robot]);
+
+  const breadcrumbSchema = useMemo(() => {
+    if (!robot) return null;
+    const items = [
+      { name: "בית", url: `${ORIGIN}/` },
+      ...(robot.category
+        ? [{ name: robot.category.name, url: `${ORIGIN}/category/${robot.category.slug}` }]
+        : []),
+      { name: robot.name, url: `${ORIGIN}/robot/${robot.slug}` },
+    ];
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        item: item.url,
+      })),
+    };
+  }, [robot]);
+
+  useJsonLd("product", productSchema);
+  useJsonLd("breadcrumb", breadcrumbSchema);
 
   if (isLoading) return <RobotSkeleton />;
   if (!robot) return <NotFound />;

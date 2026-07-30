@@ -1,10 +1,14 @@
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 import { Reveal } from "@/components/ui/reveal";
 import { RobotCard, RobotCardSkeleton } from "@/components/product/RobotCard";
 import { NewsletterCta } from "@/components/sections/NewsletterCta";
 import { useCategories, useRobots } from "@/data/queries";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useJsonLd } from "@/hooks/useJsonLd";
+
+const ORIGIN = "https://buyrobots.co.il";
 
 const SORTS = [
   { value: "score", label: "הציון הגבוה ביותר" },
@@ -27,10 +31,50 @@ export default function Category() {
     path: `/category/${slug}`,
   });
 
+  const breadcrumbSchema = useMemo(() => {
+    if (!category) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "בית", item: `${ORIGIN}/` },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: category.name,
+          item: `${ORIGIN}/category/${category.slug}`,
+        },
+      ],
+    };
+  }, [category]);
+
+  const itemListSchema = useMemo(() => {
+    if (!category || robots.length === 0) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      itemListElement: robots.map((robot, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        url: `${ORIGIN}/robot/${robot.slug}`,
+        name: robot.name,
+      })),
+    };
+  }, [category, robots]);
+
+  useJsonLd("breadcrumb", breadcrumbSchema);
+  useJsonLd("itemlist", itemListSchema);
+
   return (
     <>
       <section className="pb-14 pt-28 md:pb-16 md:pt-32">
         <div className="container">
+          <nav aria-label="פירורי לחם" className="mb-8 flex items-center gap-1 text-xs text-muted-foreground">
+            <Link to="/" className="hover:text-foreground">בית</Link>
+            <ChevronLeft className="size-3" />
+            <span className="text-foreground">{category?.name ?? "קטגוריה"}</span>
+          </nav>
+
           <h1 className="text-balance text-3xl font-semibold sm:text-4xl lg:text-5xl">
             {category?.name ?? "קטגוריה"}
           </h1>

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -7,8 +8,11 @@ import { RobotCard } from "@/components/product/RobotCard";
 import { LeadForm } from "@/components/lead/LeadForm";
 import { useCategories, useGuide, useRobots } from "@/data/queries";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { formatDate } from "@/lib/format";
 import NotFound from "@/pages/NotFound";
+
+const ORIGIN = "https://buyrobots.co.il";
 
 export default function Guide() {
   const { slug } = useParams();
@@ -25,6 +29,35 @@ export default function Guide() {
     description: guide?.excerpt ?? undefined,
     path: `/guide/${slug}`,
   });
+
+  const articleSchema = useMemo(() => {
+    if (!guide) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: guide.title,
+      description: guide.excerpt ?? undefined,
+      image: guide.cover ?? undefined,
+      datePublished: guide.published_at ?? undefined,
+      url: `${ORIGIN}/guide/${guide.slug}`,
+    };
+  }, [guide]);
+
+  const breadcrumbSchema = useMemo(() => {
+    if (!guide) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "בית", item: `${ORIGIN}/` },
+        { "@type": "ListItem", position: 2, name: "מדריכים", item: `${ORIGIN}/guides` },
+        { "@type": "ListItem", position: 3, name: guide.title, item: `${ORIGIN}/guide/${guide.slug}` },
+      ],
+    };
+  }, [guide]);
+
+  useJsonLd("article", articleSchema);
+  useJsonLd("breadcrumb", breadcrumbSchema);
 
   if (isLoading) {
     return (
