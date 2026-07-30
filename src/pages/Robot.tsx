@@ -106,6 +106,44 @@ export default function Robot() {
             <span className="text-foreground">{robot.name}</span>
           </nav>
 
+          {/* ---------- summary box ---------- */}
+          {robot.verdict && (
+            <div className="mb-10 rounded-[1.75rem] border border-accent/30 bg-accent/[0.06] p-6 md:p-8">
+              <p className="text-xs font-medium uppercase tracking-[0.15em] text-accent">
+                הפסק דין שלנו
+              </p>
+              <p className="mt-3 max-w-2xl text-lg font-medium leading-8">
+                {robot.verdict}
+              </p>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">הציון הסופי</p>
+                  <p className="mt-1 text-xl font-semibold tabular-nums">
+                    <bdi>{robot.score?.toFixed(1) ?? "—"}</bdi>
+                  </p>
+                </div>
+                {robot.pros[0] && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">יתרון מרכזי</p>
+                    <p className="mt-1 text-sm leading-6">{robot.pros[0]}</p>
+                  </div>
+                )}
+                {robot.cons[0] && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">חיסרון מרכזי</p>
+                    <p className="mt-1 text-sm leading-6">{robot.cons[0]}</p>
+                  </div>
+                )}
+                {robot.best_for.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">מתאים במיוחד ל</p>
+                    <p className="mt-1 text-sm leading-6">{robot.best_for.join(", ")}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
             <div>
               <Badge
@@ -266,6 +304,85 @@ export default function Robot() {
           </aside>
         </div>
       </section>
+
+      {/* ---------- who it's for ---------- */}
+      {(robot.best_for.length > 0 || robot.not_for.length > 0) && (
+        <section className="border-t border-white/10 bg-background py-14 md:py-20">
+          <div className="container">
+            <Reveal>
+              <h2 className="text-2xl font-semibold sm:text-3xl">למי זה מתאים, ולמי לא</h2>
+              <div className="mt-8 grid gap-8 sm:grid-cols-2">
+                {robot.best_for.length > 0 && (
+                  <div>
+                    <p className="text-sm font-medium text-accent">מתאים ל</p>
+                    <ul className="mt-3 space-y-3">
+                      {robot.best_for.map((item) => (
+                        <li key={item} className="flex gap-3 text-sm leading-6">
+                          <Check className="mt-0.5 size-4 shrink-0 text-accent" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {robot.not_for.length > 0 && (
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">פחות מתאים ל</p>
+                    <ul className="mt-3 space-y-3">
+                      {robot.not_for.map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-3 text-sm leading-6 text-muted-foreground"
+                        >
+                          <Minus className="mt-0.5 size-4 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- maintenance & warranty ---------- */}
+      {(robot.maintenance_cost || robot.warranty || robot.spare_parts_availability) && (
+        <section className="border-t border-white/10 bg-surface py-14 md:py-20">
+          <div className="container">
+            <Reveal>
+              <h2 className="text-2xl font-semibold sm:text-3xl">עלויות ואחריות בישראל</h2>
+              <div className="mt-8 grid gap-8 sm:grid-cols-3">
+                {robot.maintenance_cost && (
+                  <div>
+                    <p className="text-sm font-medium">עלויות תחזוקה</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {robot.maintenance_cost}
+                    </p>
+                  </div>
+                )}
+                {robot.warranty && (
+                  <div>
+                    <p className="text-sm font-medium">אחריות</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {robot.warranty}
+                    </p>
+                  </div>
+                )}
+                {robot.spare_parts_availability && (
+                  <div>
+                    <p className="text-sm font-medium">זמינות חלקי חילוף</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {robot.spare_parts_availability}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* ---------- related ---------- */}
       <section className="bg-surface py-14 md:py-20">
