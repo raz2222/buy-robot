@@ -509,7 +509,11 @@ export default function RobotEditor() {
           )}
 
           <div>
-            <Button type="submit" disabled={save.isPending || !productUrl}>
+            <Button
+              type="submit"
+              disabled={save.isPending || !productUrl}
+              className="w-full sm:w-auto"
+            >
               {save.isPending && <Loader2 className="size-4 animate-spin" />}
               הוספה
             </Button>

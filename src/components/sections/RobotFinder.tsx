@@ -137,6 +137,8 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
   const { data: robots = [] } = useRobots({ categorySlug: answers.need });
 
   const onContactStep = step === STEPS.length;
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const isFirstStep = useRef(true);
 
   useEffect(() => {
     track("quiz_start", { embedded });
@@ -151,6 +153,19 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
     setEntered(false);
     const timer = window.setTimeout(() => setEntered(true), 40);
     return () => window.clearTimeout(timer);
+  }, [step]);
+
+  // Moves focus to the new question/result heading on every step after the
+  // first, so keyboard and screen-reader users are told the step changed —
+  // nothing here otherwise triggers a route change or page reload for them
+  // to notice by. Skipped on the very first render so the quiz never
+  // steals focus from the page on mount.
+  useEffect(() => {
+    if (isFirstStep.current) {
+      isFirstStep.current = false;
+      return;
+    }
+    headingRef.current?.focus();
   }, [step]);
 
   /** Filters the catalogue down to what the answers actually allow. Never
@@ -256,7 +271,11 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
           >
             <LabelRule>{`שאלה ${step + 1} מתוך ${STEPS.length}`}</LabelRule>
 
-            <h2 className="mt-7 text-balance text-3xl font-medium sm:text-[2.75rem] sm:leading-[1.1]">
+            <h2
+              ref={headingRef}
+              tabIndex={-1}
+              className="mt-7 text-balance text-3xl font-medium outline-none sm:text-[2.75rem] sm:leading-[1.1]"
+            >
               {current.question}
             </h2>
             <p className="mt-4 text-base text-muted-foreground">{current.blurb}</p>
@@ -351,7 +370,11 @@ export function RobotFinder({ embedded = false }: { embedded?: boolean }) {
           >
             <LabelRule>{sent ? "נשמר" : "הצעד האחרון"}</LabelRule>
 
-            <h2 className="mt-7 text-balance text-3xl font-medium sm:text-[2.75rem] sm:leading-[1.1]">
+            <h2
+              ref={headingRef}
+              tabIndex={-1}
+              className="mt-7 text-balance text-3xl font-medium outline-none sm:text-[2.75rem] sm:leading-[1.1]"
+            >
               {matches.length === 1 ? (
                 <>
                   מצאנו <span className="text-accent">דגם אחד</span> שמתאים לך
