@@ -20,11 +20,11 @@ export default function NotFound() {
           יכול להיות שהקישור ישן, או שהדגם ירד מהמדף. אפשר להתחיל מכאן:
         </p>
 
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg">
+        <div className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
+          <Button asChild size="lg" className="w-full sm:w-auto">
             <Link to="/">לעמוד הבית</Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
+          <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
             <Link to="/find-my-robot">מצא את הרובוט שלי</Link>
           </Button>
         </div>

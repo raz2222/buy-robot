@@ -130,9 +130,9 @@ export function CompareLab() {
         {/* ---------- the reveal ---------- */}
         {selection.length > 1 && (
           <div className="mt-10">
-            <div className="flex flex-wrap justify-center gap-3">
+            <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
               {selection.length === 2 && (
-                <Button asChild size="lg" variant="outline">
+                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
                   <Link to={`/compare/${selection[0].slug}/${selection[1].slug}`}>
                     לעמוד ההשוואה המלא
                   </Link>
@@ -153,6 +153,7 @@ export function CompareLab() {
                 }}
                 aria-expanded={open}
                 aria-controls="compare-table"
+                className="w-full sm:w-auto"
               >
                 {open ? "סגור את ההשוואה" : `השווה ${selection.length} דגמים`}
                 <ChevronDown

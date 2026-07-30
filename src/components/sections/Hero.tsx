@@ -239,11 +239,11 @@ export function Hero({ robots }: { robots: RobotWithOffers[] }) {
               לבית, לצרכים ולתקציב שלכם.
             </p>
 
-            <div {...entrance(ready, 460, "mt-10 flex flex-wrap items-center gap-3")}>
-              <Button size="lg" onClick={scrollToFinder}>
+            <div {...entrance(ready, 460, "mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center")}>
+              <Button size="lg" onClick={scrollToFinder} className="w-full sm:w-auto">
                 התחילו התאמה אישית
               </Button>
-              <Button asChild size="lg" variant="outline">
+              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
                 <Link to="/comparisons">לכל ההשוואות</Link>
               </Button>
             </div>

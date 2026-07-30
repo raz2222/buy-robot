@@ -168,7 +168,7 @@ export function ContactForm({
       )}
 
       <div className="sm:col-span-2">
-        <Button type="submit" size="lg" disabled={submit.isPending}>
+        <Button type="submit" size="lg" disabled={submit.isPending} className="w-full sm:w-auto">
           {submit.isPending && <Loader2 className="size-4 animate-spin" />}
           {cta}
         </Button>
