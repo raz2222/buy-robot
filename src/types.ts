@@ -62,6 +62,22 @@ export interface Robot {
   sort: number;
   created_at: string;
   updated_at: string;
+
+  /** One line for the summary box: "our verdict". Null until an editor
+   * writes it — the box simply doesn't render without it. */
+  verdict: string | null;
+  /** Who this model is genuinely a good fit for, e.g. "בתים עם שטיח". */
+  best_for: string[];
+  /** Who should look elsewhere, e.g. "דירות קטנות בלי מסדרון למצוא בסיס". */
+  not_for: string[];
+  maintenance_cost: string | null;
+  warranty: string | null;
+  spare_parts_availability: string | null;
+  /** Free-form tags for grouping robots on comparison pages. */
+  comparison_tags: string[];
+  /** Free-form tags the calculator can match against in the future,
+   * alongside (not replacing) the category/budget/pets logic it already uses. */
+  calculator_tags: string[];
 }
 
 /** Public offer row. `product_url` / `affiliate_url` are withheld. */

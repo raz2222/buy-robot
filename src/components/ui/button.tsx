@@ -40,7 +40,10 @@ const buttonVariants = cva(
       size: {
         sm: "h-9 px-4 text-sm",
         md: "h-11 px-6 text-sm",
-        lg: "h-[3.25rem] px-8 text-base",
+        // lg is used exclusively for primary/secondary page CTAs — full
+        // width on a phone (where a half-width pill reads as an accident),
+        // back to content width from sm up.
+        lg: "h-[3.25rem] w-full px-8 text-base sm:w-auto",
         icon: "h-11 w-11",
       },
     },

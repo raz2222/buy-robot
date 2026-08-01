@@ -235,6 +235,16 @@
     text-wrap: balance;
   }
 
+  /* Hides the scrollbar on the primary nav's horizontal fallback without
+     hiding overflow itself — the row still scrolls on narrower desktops. */
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { PillTag } from "@/components/ui/deco";
 import { ProductImage } from "@/components/ui/product-image";
 import { bestOffer, maxSaving } from "@/lib/offers";
+import { track } from "@/lib/analytics";
 import { formatPrice } from "@/lib/format";
 import type { RobotWithOffers } from "@/types";
 import { cn } from "@/lib/utils";
@@ -29,6 +30,7 @@ export function RobotCard({
     <article className={cn("group h-full", className)}>
       <Link
         to={`/robot/${robot.slug}`}
+        onClick={() => track("product_click", { slug: robot.slug, from: "card" })}
         className="flex h-full flex-col rounded-[1.75rem] border border-white/10 bg-surface p-3 transition-colors duration-500 ease-smooth hover:border-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         <div className="relative overflow-hidden rounded-[1.35rem]">

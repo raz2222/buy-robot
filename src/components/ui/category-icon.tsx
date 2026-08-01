@@ -4,6 +4,7 @@ import {
   Droplets,
   PanelTop,
   PersonStanding,
+  ToyBrick,
   Trees,
   Waves,
   type LucideIcon,
@@ -22,6 +23,7 @@ const ICONS: Record<string, LucideIcon> = {
   PanelTop,
   PersonStanding,
   Dog,
+  ToyBrick,
 };
 
 export const ICON_NAMES = Object.keys(ICONS);

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Check, ChevronLeft, Minus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -9,9 +10,12 @@ import { RobotCard } from "@/components/product/RobotCard";
 import { LeadForm } from "@/components/lead/LeadForm";
 import { useRobot, useRobots } from "@/data/queries";
 import { useDocumentMeta } from "@/hooks/useDocumentMeta";
+import { useJsonLd } from "@/hooks/useJsonLd";
 import { bestOffer, maxSaving } from "@/lib/offers";
 import { formatPrice } from "@/lib/format";
 import NotFound from "@/pages/NotFound";
+
+const ORIGIN = "https://buyrobots.co.il";
 
 export default function Robot() {
   const { slug } = useParams();
@@ -23,6 +27,55 @@ export default function Robot() {
     description: robot?.summary ?? undefined,
     path: `/robot/${slug}`,
   });
+
+  // Real offers only — no fabricated rating or review, since there is no
+  // genuine review data model behind this catalogue yet.
+  const productSchema = useMemo(() => {
+    if (!robot) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: robot.name,
+      brand: { "@type": "Brand", name: robot.brand },
+      description: robot.summary ?? undefined,
+      image: robot.hero_image ?? undefined,
+      url: `${ORIGIN}/robot/${robot.slug}`,
+      offers: robot.offers.map((offer) => ({
+        "@type": "Offer",
+        price: offer.price ?? undefined,
+        priceCurrency: "ILS",
+        availability: offer.in_stock
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+        url: `${ORIGIN}/robot/${robot.slug}`,
+        seller: offer.store ? { "@type": "Organization", name: offer.store.name } : undefined,
+      })),
+    };
+  }, [robot]);
+
+  const breadcrumbSchema = useMemo(() => {
+    if (!robot) return null;
+    const items = [
+      { name: "בית", url: `${ORIGIN}/` },
+      ...(robot.category
+        ? [{ name: robot.category.name, url: `${ORIGIN}/category/${robot.category.slug}` }]
+        : []),
+      { name: robot.name, url: `${ORIGIN}/robot/${robot.slug}` },
+    ];
+    return {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: items.map((item, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: item.name,
+        item: item.url,
+      })),
+    };
+  }, [robot]);
+
+  useJsonLd("product", productSchema);
+  useJsonLd("breadcrumb", breadcrumbSchema);
 
   if (isLoading) return <RobotSkeleton />;
   if (!robot) return <NotFound />;
@@ -52,6 +105,44 @@ export default function Robot() {
             )}
             <span className="text-foreground">{robot.name}</span>
           </nav>
+
+          {/* ---------- summary box ---------- */}
+          {robot.verdict && (
+            <div className="mb-10 rounded-[1.75rem] border border-accent/30 bg-accent/[0.06] p-6 md:p-8">
+              <p className="text-xs font-medium uppercase tracking-[0.15em] text-accent">
+                הפסק דין שלנו
+              </p>
+              <p className="mt-3 max-w-2xl text-lg font-medium leading-8">
+                {robot.verdict}
+              </p>
+              <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div>
+                  <p className="text-xs text-muted-foreground">הציון הסופי</p>
+                  <p className="mt-1 text-xl font-semibold tabular-nums">
+                    <bdi>{robot.score?.toFixed(1) ?? "—"}</bdi>
+                  </p>
+                </div>
+                {robot.pros[0] && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">יתרון מרכזי</p>
+                    <p className="mt-1 text-sm leading-6">{robot.pros[0]}</p>
+                  </div>
+                )}
+                {robot.cons[0] && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">חיסרון מרכזי</p>
+                    <p className="mt-1 text-sm leading-6">{robot.cons[0]}</p>
+                  </div>
+                )}
+                {robot.best_for.length > 0 && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">מתאים במיוחד ל</p>
+                    <p className="mt-1 text-sm leading-6">{robot.best_for.join(", ")}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
             <div>
@@ -213,6 +304,85 @@ export default function Robot() {
           </aside>
         </div>
       </section>
+
+      {/* ---------- who it's for ---------- */}
+      {(robot.best_for.length > 0 || robot.not_for.length > 0) && (
+        <section className="border-t border-white/10 bg-background py-14 md:py-20">
+          <div className="container">
+            <Reveal>
+              <h2 className="text-2xl font-semibold sm:text-3xl">למי זה מתאים, ולמי לא</h2>
+              <div className="mt-8 grid gap-8 sm:grid-cols-2">
+                {robot.best_for.length > 0 && (
+                  <div>
+                    <p className="text-sm font-medium text-accent">מתאים ל</p>
+                    <ul className="mt-3 space-y-3">
+                      {robot.best_for.map((item) => (
+                        <li key={item} className="flex gap-3 text-sm leading-6">
+                          <Check className="mt-0.5 size-4 shrink-0 text-accent" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {robot.not_for.length > 0 && (
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">פחות מתאים ל</p>
+                    <ul className="mt-3 space-y-3">
+                      {robot.not_for.map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-3 text-sm leading-6 text-muted-foreground"
+                        >
+                          <Minus className="mt-0.5 size-4 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      {/* ---------- maintenance & warranty ---------- */}
+      {(robot.maintenance_cost || robot.warranty || robot.spare_parts_availability) && (
+        <section className="border-t border-white/10 bg-surface py-14 md:py-20">
+          <div className="container">
+            <Reveal>
+              <h2 className="text-2xl font-semibold sm:text-3xl">עלויות ואחריות בישראל</h2>
+              <div className="mt-8 grid gap-8 sm:grid-cols-3">
+                {robot.maintenance_cost && (
+                  <div>
+                    <p className="text-sm font-medium">עלויות תחזוקה</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {robot.maintenance_cost}
+                    </p>
+                  </div>
+                )}
+                {robot.warranty && (
+                  <div>
+                    <p className="text-sm font-medium">אחריות</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {robot.warranty}
+                    </p>
+                  </div>
+                )}
+                {robot.spare_parts_availability && (
+                  <div>
+                    <p className="text-sm font-medium">זמינות חלקי חילוף</p>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {robot.spare_parts_availability}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       {/* ---------- related ---------- */}
       <section className="bg-surface py-14 md:py-20">

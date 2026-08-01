@@ -1,68 +1,15 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { Check, ChevronDown } from "lucide-react";
 import { PocketCard } from "@/components/product/PocketCard";
+import { MeasureTable } from "@/components/product/ComparisonMeasures";
 import { Button } from "@/components/ui/button";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { useCategories, useRobots } from "@/data/queries";
-import { maxSaving } from "@/lib/offers";
-import { formatPrice } from "@/lib/format";
-import type { RobotWithOffers } from "@/types";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const MAX_PICKS = 3;
-
-interface Measure {
-  key: string;
-  label: string;
-  /** Which direction counts as better — flips how the winner is marked. */
-  better: "high" | "low";
-  value: (robot: RobotWithOffers) => number;
-  format: (value: number) => string;
-  note: string;
-}
-
-/**
- * Only measures that come straight off a column are compared.
- *
- * The spec sheets are free text ("10,000 Pa", "עד 7 שבועות") and parsing a
- * number out of them would silently invent data the moment a supplier
- * writes a value differently. These four are exact, and they are the ones
- * a buyer actually decides on.
- */
-const MEASURES: Measure[] = [
-  {
-    key: "score",
-    label: "הציון שלנו",
-    better: "high",
-    value: (robot) => robot.score ?? 0,
-    format: (value) => value.toFixed(1),
-    note: "מפרט, מחיר בפועל ודירוגי משתמשים",
-  },
-  {
-    key: "price",
-    label: "המחיר הזול ביותר",
-    better: "low",
-    value: (robot) => robot.offers?.[0]?.price ?? robot.price_from ?? 0,
-    format: (value) => formatPrice(value),
-    note: "כמה שפחות, יותר טוב",
-  },
-  {
-    key: "saving",
-    label: "חיסכון מהשוואה",
-    better: "high",
-    value: (robot) => maxSaving(robot),
-    format: (value) => formatPrice(value),
-    note: "ההפרש בין החנות היקרה לזולה",
-  },
-  {
-    key: "stores",
-    label: "חנויות שמוכרות",
-    better: "high",
-    value: (robot) => robot.offers?.length ?? 0,
-    format: (value) => String(value),
-    note: "יותר חנויות, יותר מקום למשא ומתן",
-  },
-];
 
 export function CompareLab() {
   const { data: categories = [] } = useCategories();
@@ -100,8 +47,11 @@ export function CompareLab() {
           blurb="בחר עד שלושה דגמים ותראה בדיוק במה הם נבדלים — ציון, מחיר, כמה החיפוש חוסך לך ובכמה חנויות הם נמכרים."
         />
 
-        {/* ---------- category switch ---------- */}
-        <div className="mt-10 flex flex-wrap gap-2">
+        {/* ---------- category switch ----------
+            A horizontally-scrolling strip on mobile, not a wall of wrapped
+            pills — with this many categories, wrapping reads as broken
+            tabs rather than a chooser. */}
+        <div className="scrollbar-none -mx-5 mt-10 flex snap-x gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {categories.map((category) => (
             <button
               key={category.id}
@@ -109,7 +59,7 @@ export function CompareLab() {
               onClick={() => switchCategory(category.slug)}
               aria-pressed={categorySlug === category.slug}
               className={cn(
-                "min-h-11 rounded-full border px-4 text-sm transition-colors duration-300",
+                "min-h-11 shrink-0 snap-start rounded-full border px-4 text-sm transition-colors duration-300",
                 categorySlug === category.slug
                   ? "border-transparent bg-foreground text-background"
                   : "border-white/15 text-muted-foreground hover:border-white/40 hover:text-foreground",
@@ -121,7 +71,7 @@ export function CompareLab() {
         </div>
 
         {/* ---------- picker ---------- */}
-        <div className="mt-6 flex flex-wrap gap-2">
+        <div className="scrollbar-none -mx-5 mt-6 flex snap-x gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0">
           {robots.map((robot) => {
             const active = selection.some((item) => item.id === robot.id);
             const seriesIndex = selection.findIndex((item) => item.id === robot.id);
@@ -132,7 +82,7 @@ export function CompareLab() {
                 onClick={() => toggle(robot.id)}
                 aria-pressed={active}
                 className={cn(
-                  "flex min-h-11 items-center gap-2 rounded-full border px-4 text-sm transition-colors duration-300",
+                  "flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm transition-colors duration-300",
                   active
                     ? "border-white/40 bg-surface text-foreground"
                     : "border-white/10 text-muted-foreground hover:border-white/30 hover:text-foreground",
@@ -180,13 +130,30 @@ export function CompareLab() {
         {/* ---------- the reveal ---------- */}
         {selection.length > 1 && (
           <div className="mt-10">
-            <div className="flex justify-center">
+            <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:justify-center">
+              {selection.length === 2 && (
+                <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+                  <Link to={`/compare/${selection[0].slug}/${selection[1].slug}`}>
+                    לעמוד ההשוואה המלא
+                  </Link>
+                </Button>
+              )}
               <Button
                 size="lg"
                 variant={open ? "outline" : "accent"}
-                onClick={() => setOpen((value) => !value)}
+                onClick={() => {
+                  const next = !open;
+                  setOpen(next);
+                  if (next) {
+                    track("comparison_view", {
+                      category: categorySlug,
+                      robots: selection.map((robot) => robot.slug),
+                    });
+                  }
+                }}
                 aria-expanded={open}
                 aria-controls="compare-table"
+                className="w-full sm:w-auto"
               >
                 {open ? "סגור את ההשוואה" : `השווה ${selection.length} דגמים`}
                 <ChevronDown
@@ -208,127 +175,14 @@ export function CompareLab() {
               )}
             >
               <div className="overflow-hidden">
-                <ComparisonTable selection={selection} open={open} />
+                <div className="mt-8">
+                  <MeasureTable selection={selection} open={open} />
+                </div>
               </div>
             </div>
           </div>
         )}
       </div>
     </section>
-  );
-}
-
-/**
- * The comparison itself: one row per measure, one column per model.
- *
- * Each cell carries the number *and* a bar, because a bar answers "by how
- * much" at a glance while the number answers "exactly what" — and a table
- * that only has bars cannot be read by a screen reader or copied out.
- *
- * The bars are scaled per row, never across the table. A shekel price and
- * a score out of ten share no axis; one scale for both would make the
- * bars lie about their relative size.
- */
-function ComparisonTable({
-  selection,
-  open,
-}: {
-  selection: RobotWithOffers[];
-  open: boolean;
-}) {
-  return (
-    <div className="mt-8 overflow-x-auto rounded-[1.5rem] border border-white/10 bg-surface">
-      <table className="w-full min-w-[32rem]">
-        <caption className="sr-only">
-          השוואה מספרית בין הדגמים שנבחרו
-        </caption>
-
-        <thead>
-          <tr className="border-b border-white/10">
-            <th scope="col" className="p-4 text-start text-xs font-medium text-muted-foreground">
-              מדד
-            </th>
-            {selection.map((robot, index) => (
-              <th key={robot.id} scope="col" className="p-4 text-start">
-                <span className="flex items-center gap-2">
-                  <span
-                    aria-hidden="true"
-                    className="size-2.5 shrink-0 rounded-full"
-                    style={{ background: `hsl(var(--series-${index + 1}))` }}
-                  />
-                  <span className="text-sm font-medium" dir="ltr">
-                    {robot.name}
-                  </span>
-                </span>
-              </th>
-            ))}
-          </tr>
-        </thead>
-
-        <tbody className="divide-y divide-white/10">
-          {MEASURES.map((measure, rowIndex) => {
-            const values = selection.map(measure.value);
-            const max = Math.max(...values, 1);
-            const positives = values.filter((value) => value > 0);
-            const best =
-              measure.better === "high"
-                ? Math.max(...values)
-                : positives.length
-                  ? Math.min(...positives)
-                  : 0;
-
-            return (
-              <tr
-                key={measure.key}
-                className={cn(
-                  "transition-all duration-500 ease-smooth",
-                  open ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0",
-                )}
-                style={{ transitionDelay: `${120 + rowIndex * 90}ms` }}
-              >
-                <th scope="row" className="p-4 text-start align-top">
-                  <span className="block text-sm font-normal">{measure.label}</span>
-                  <span className="mt-0.5 block text-xs text-muted-foreground">
-                    {measure.note}
-                  </span>
-                </th>
-
-                {selection.map((robot, index) => {
-                  const value = measure.value(robot);
-                  const isBest = value === best && value > 0;
-                  return (
-                    <td key={robot.id} className="p-4 align-top">
-                      <span className="flex items-baseline gap-2">
-                        <span className="text-base font-medium tabular-nums">
-                          <bdi>{measure.format(value)}</bdi>
-                        </span>
-                        {isBest && (
-                          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[0.65rem] text-foreground">
-                            הכי טוב
-                          </span>
-                        )}
-                      </span>
-
-                      <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                        <span
-                          className="block h-full rounded-full transition-[width] duration-700 ease-smooth"
-                          style={{
-                            width: open
-                              ? `${Math.max((value / max) * 100, value > 0 ? 5 : 0)}%`
-                              : "0%",
-                            background: `hsl(var(--series-${index + 1}))`,
-                            transitionDelay: `${200 + rowIndex * 90}ms`,
-                          }}
-                        />
-                      </span>
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
   );
 }

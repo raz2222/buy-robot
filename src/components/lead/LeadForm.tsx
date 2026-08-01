@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSubmitLead } from "@/data/queries";
+import { track } from "@/lib/analytics";
 import type { LeadType } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +55,7 @@ export function LeadForm({
     try {
       await submit.mutateAsync({ type, email: email.trim(), payload });
       setDone(true);
+      track("newsletter_signup", { type });
     } catch {
       setError("משהו השתבש. אפשר לנסות שוב?");
     }
@@ -100,7 +102,7 @@ export function LeadForm({
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `lead-${type}-error` : undefined}
           className={cn(
-            "h-12 flex-1 rounded-full px-5 text-start text-sm outline-none transition-colors",
+            "h-12 w-full flex-1 rounded-full px-5 text-start text-sm outline-none transition-colors",
             dark
               ? "bg-white/10 text-foreground placeholder:text-muted-foreground sm:bg-transparent"
               : "border border-white/20 bg-background text-foreground placeholder:text-muted-foreground sm:border-transparent",
@@ -111,7 +113,7 @@ export function LeadForm({
           size="md"
           variant={dark ? "accent" : "default"}
           disabled={submit.isPending}
-          className="h-12 shrink-0"
+          className="h-12 w-full shrink-0 sm:w-auto"
         >
           {submit.isPending && <Loader2 className="size-4 animate-spin" />}
           {cta}
